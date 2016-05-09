@@ -51,6 +51,18 @@ CreateEmploymentMarkdown <- function(orcid.info, outdir=".") {
 		cat(employment.string, file=paste(outdir, "/employment.md", sep=""))	
 }
 
-FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "grants.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "talks.md"), output="OMearaCV.pdf") {
+
+CreateFundingMarkdown <- function(orcid.info, outdir=".", additional = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRFP, and various internal grants at UC Davis).") {
+		funding.string <- '## Funding'
+		for (i in sequence(dim(orcid.info$funding)[1])) {
+			funding.string <- paste(funding.string, '\n\n', 	orcid.info$funding[i,]$organization.name, ': ', orcid.info$funding[i,]$'role-title', " (", orcid.info$funding[i,]$'end-date.year.value', ")", sep='')
+			if(!is.na(funding$'department-name')[i]) {
+				funding.string <- paste(funding.string, ' in ', 	orcid.info$funding[i,]$'department-name', sep='')
+			}
+		}
+		cat(funding.string, file=paste(outdir, "/funding.md", sep=""))
+}
+
+FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "talks.md"), output="OMearaCV.pdf") {
   system(paste("pandoc ", paste(input, collapse=" "), " > ", output, sep=""))
 }
