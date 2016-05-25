@@ -1,0 +1,15 @@
+Package: cv
+Title: Code for compiling CVs from ORCID
+Version: 0.2
+Author: Brian O'Meara <omeara.brian@gmail.com>
+Maintainer: Brian O'Meara <omeara.brian@gmail.com>
+Description: Use ORCID data to create a CV
+Depends:
+    R (>= 3.2.3)
+Imports:
+    rorcid
+Suggests:
+    testthat
+License: GPL (>=2)
+LazyData: true
+RoxygenNote: 5.0.1
