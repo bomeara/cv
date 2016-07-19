@@ -41,7 +41,7 @@ CreateEducationMarkdown <- function(orcid.info, outdir=".") {
 		education.string <- '## Education'
 		for (i in sequence(dim(orcid.info$education)[1])) {
 			education.string <- paste(education.string, '\n\n', 	orcid.info$education[i,]$organization.name, ': ', orcid.info$education[i,]$'role-title', " (", orcid.info$education[i,]$'end-date.year.value', ")", sep='')
-			if(!is.na(education$'department-name')[i]) {
+			if(!is.na(orcid.info$education$'department-name')[i]) {
 				education.string <- paste(education.string, ' in ', 	orcid.info$education[i,]$'department-name', sep='')
 			}
 		}
@@ -54,10 +54,10 @@ CreateEducationMarkdown <- function(orcid.info, outdir=".") {
 #' @export
 CreateEmploymentMarkdown <- function(orcid.info, outdir=".") {
 		employment.string <- '## Employment'
-		orcid.info$employment$'end-date.year.value'[which(is.na(employment$'end-date.year.value'))] <- "Present"
+		orcid.info$employment$'end-date.year.value'[which(is.na(orcid.info$employment$'end-date.year.value'))] <- "Present"
 		for (i in sequence(dim(orcid.info$employment)[1])) {
 			employment.string <- paste(employment.string, '\n\n', 	orcid.info$employment[i,]$'start-date.year.value', '-', orcid.info$employment[i,]$'end-date.year.value', ": ", orcid.info$employment[i,]$'role-title', ", ", sep='')
-			if(!is.na(employment$'department-name')[i]) {
+			if(!is.na(orcid.info$employment$'department-name')[i]) {
 				employment.string <- paste(employment.string, "Dept. of ", 	orcid.info$employment[i,]$'department-name', ", ", sep='')
 			}
 			employment.string <- paste(employment.string, orcid.info$employment[i,]$'organization.name', ", ", orcid.info$employment[i,]$'organization.address.city', ", ", orcid.info$employment[i,]$'organization.address.region', sep="")
@@ -74,7 +74,7 @@ CreateFundingMarkdown <- function(orcid.info, outdir=".", additional.te = "This 
 		funding.string <- '## Funding'
 		for (i in sequence(dim(orcid.info$funding)[1])) {
 			funding.string <- paste(funding.string, '\n\n', 	orcid.info$funding[i,]$organization.name, ': ', orcid.info$funding[i,]$'role-title', " (", orcid.info$funding[i,]$'end-date.year.value', ")", sep='')
-			if(!is.na(funding$'department-name')[i]) {
+			if(!is.na(orcid.info$funding$'department-name')[i]) {
 				funding.string <- paste(funding.string, ' in ', 	orcid.info$funding[i,]$'department-name', sep='')
 			}
 		}
