@@ -100,13 +100,12 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
 #' @export
 CleanNames <- function(citations) {
 	for (i in sequence(length(citations))) {
+    citations[i] <- gsub("meara", "Meara", citations[i])
 		citations[i] <- gsub("\\{'\\}", "'", citations[i])
 		citations[i] <- gsub("\\{\\\\textquotesingle\\}", "'", citations[i])
 		citations[i] <- gsub("O\\?Meara", "O'Meara", citations[i])
 		citations[i] <- gsub('’', "'", citations[i])
 		citations[i] <- gsub("\\{\\\\\\^\\a\\}\\?\\?", "'", citations[i])
-		citations[i] <- gsub("meara", "Meara", citations[i])
-    citations[i] <- gsub('{\\~A}{\\textthreesuperior}', "o", citations[i])
 	}
 	return(citations)
 }
@@ -116,19 +115,30 @@ CleanNames <- function(citations) {
 #' @param outdir The directory to store the markdown file in
 #' @param emphasis.name The name to bold in the publications list. Presumably your own.
 #' @export
-CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "B. O'Meara") {
+CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara") {
 	cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
 	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
-  publications.text <- print(publications, .opts=list(sorting="none", max.names=Inf))
+  publications.text <- capture.output(print(publications, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
   publications.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), publications.text)
-  cat(publications.text, file=paste(outdir, "/publications.md", sep=""))
+
+  cat(CleanNames(orcid.info$books), file=paste(outdir, "/chapters.bib", sep=""))
+  chapters <- RefManageR::ReadBib(paste(outdir, "/chapters.bib", sep=""))
+  chapters <- sort(chapters, decreasing=TRUE, sorting="ynt")
+  chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
+  chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
+
+  cat('\n\n##Publications\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+  cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  cat('\n\n###Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
+  cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 }
+
 
 #' Compile a set of markdown documents and convert with pandoc
 #' @param input Vector of markdown documents
 #' @param output The output file name. Pandoc will use the extension info to create a file of the right type.
 #' @export
 FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "talks.md"), output="OMearaCV.pdf") {
-  system(paste("pandoc --filter=pandoc-citeproc --standalone -o ", output, " ", paste(input, collapse=" "), sep=""))
+  system(paste("pandoc -o ", output, " ", paste(input, collapse=" "), sep=""))
 }
