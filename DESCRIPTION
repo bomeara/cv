@@ -7,8 +7,7 @@ Description: Use ORCID data to create a CV
 Depends:
     R (>= 3.2.3)
 Imports:
-    rorcid
-    RefManageR
+    rorcid, RefManageR
 Suggests:
     testthat
 License: GPL (>=2)

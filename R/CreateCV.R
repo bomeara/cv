@@ -26,10 +26,11 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
 #' @export
-CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=".") {
+CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir()) {
 	CreateEducationMarkdown(orcid.info, outdir)
 	CreateEmploymentMarkdown(orcid.info, outdir)
 	CreateFundingMarkdown(orcid.info, outdir)
+  CreatePublicationsMarkdown(orcid.info, outdir)
 
 }
 
@@ -37,7 +38,7 @@ CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=".") {
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
 #' @export
-CreateEducationMarkdown <- function(orcid.info, outdir=".") {
+CreateEducationMarkdown <- function(orcid.info, outdir=tempdir()) {
 		education.string <- '\n\n## Education'
 		for (i in sequence(dim(orcid.info$education)[1])) {
 			education.string <- paste(education.string, '\n\n', 	orcid.info$education[i,]$organization.name, ': ', orcid.info$education[i,]$'role-title', " (", orcid.info$education[i,]$'end-date.year.value', ")", sep='')
@@ -52,7 +53,7 @@ CreateEducationMarkdown <- function(orcid.info, outdir=".") {
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
 #' @export
-CreateEmploymentMarkdown <- function(orcid.info, outdir=".") {
+CreateEmploymentMarkdown <- function(orcid.info, outdir=tempdir()) {
 		employment.string <- '\n\n## Employment'
 		orcid.info$employment$'end-date.year.value'[which(is.na(orcid.info$employment$'end-date.year.value'))] <- "Present"
 		for (i in sequence(dim(orcid.info$employment)[1])) {
@@ -70,7 +71,7 @@ CreateEmploymentMarkdown <- function(orcid.info, outdir=".") {
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
 #' @export
-CreateFundingMarkdown <- function(orcid.info, outdir=".", additional.te = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRF, and various internal grants at UC Davis).") {
+CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRF, and various internal grants at UC Davis).") {
 		funding.string <- '\n\n## Funding\n\n'
 		funding.string <- paste(funding.string, additional.te, sep="")
 		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------- | -------- | ------ |', sep="")
@@ -83,7 +84,7 @@ CreateFundingMarkdown <- function(orcid.info, outdir=".", additional.te = "This 
 				organization <- 'NIH'
 			}
 			funding.string <- paste(funding.string, '\n| ', orcid.info$funding[i,]$'end-date.year.value', ' | ', orcid.info$funding[i,]$'funding-title.title.value', ' | ', organization, ' | ', orcid.info$funding[i,]$'amount.value', ' |', sep="")
-			
+
 
 	#		funding.string <- paste(funding.string, '\n\n', orcid.info$funding[i,]$'funding-title.title.value', " ",	orcid.info$funding[i,]$organization.name, ': ', orcid.info$funding[i,]$'role-title', " (", orcid.info$funding[i,]$'end-date.year.value', "): $", orcid.info$funding[i,]$'amount.value', sep='')
 		#	if(!is.null(orcid.info$funding$'department-name')[i]) {
@@ -105,6 +106,7 @@ CleanNames <- function(citations) {
 		citations[i] <- gsub('’', "'", citations[i])
 		citations[i] <- gsub("\\{\\\\\\^\\a\\}\\?\\?", "'", citations[i])
 		citations[i] <- gsub("meara", "Meara", citations[i])
+    citations[i] <- gsub('{\\~A}{\\textthreesuperior}', "o", citations[i])
 	}
 	return(citations)
 }
@@ -112,11 +114,15 @@ CleanNames <- function(citations) {
 #' Create a Markdown document of funding from biographical info
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
+#' @param emphasis.name The name to bold in the publications list. Presumably your own.
 #' @export
-CreatePublicationsMarkdown <- function(orcid.info, outdir=".") {
-	cat(CleanNames(orchid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
-	publications <- ReadBib(paste(outdir, "/publications.bib", sep=""))
+CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "B. O'Meara") {
+	cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
+	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
+  publications.text <- print(publications, .opts=list(sorting="none", max.names=Inf))
+  publications.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), publications.text)
+  cat(publications.text, file=paste(outdir, "/publications.md", sep=""))
 }
 
 #' Compile a set of markdown documents and convert with pandoc
