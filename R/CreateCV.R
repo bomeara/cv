@@ -25,12 +25,13 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
 #' Create a Markdown document from biographical info
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
+#' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
 #' @export
-CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir()) {
+CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), scholar.id="vpjEkQwAAAAJ") {
 	CreateEducationMarkdown(orcid.info, outdir)
 	CreateEmploymentMarkdown(orcid.info, outdir)
 	CreateFundingMarkdown(orcid.info, outdir)
-  CreatePublicationsMarkdown(orcid.info, outdir)
+  CreatePublicationsMarkdown(orcid.info, outdir, scholar.id)
 
 }
 
@@ -83,7 +84,7 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
 			if (grepl("National Institutes of Health", organization, ignore.case=FALSE)) {
 				organization <- 'NIH'
 			}
-			funding.string <- paste(funding.string, '\n| ', orcid.info$funding[i,]$'end-date.year.value', ' | ', orcid.info$funding[i,]$'funding-title.title.value', ' | ', organization, ' | ', orcid.info$funding[i,]$'amount.value', ' |', sep="")
+			funding.string <- paste(funding.string, '\n| ', orcid.info$funding[i,]$'start-date.year.value', ' | ', orcid.info$funding[i,]$'funding-title.title.value', ' | ', organization, ' | $', orcid.info$funding[i,]$'amount.value', ' |', sep="")
 
 
 	#		funding.string <- paste(funding.string, '\n\n', orcid.info$funding[i,]$'funding-title.title.value', " ",	orcid.info$funding[i,]$organization.name, ': ', orcid.info$funding[i,]$'role-title', " (", orcid.info$funding[i,]$'end-date.year.value', "): $", orcid.info$funding[i,]$'amount.value', sep='')
@@ -114,8 +115,9 @@ CleanNames <- function(citations) {
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
 #' @param emphasis.name The name to bold in the publications list. Presumably your own.
+#' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
 #' @export
-CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara") {
+CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ") {
 	cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
 	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
@@ -128,7 +130,15 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
   chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
   chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
 
-  cat('\n\n##Publications\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n##Publications', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+  if(!is.null(scholar.id)) {
+    g.profile <- NULL
+    try(g.profile <- scholar::get_profile(scholar.id))
+    if(!is.null(g.profile)) {
+      cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, sep=""), , file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+    }
+  }
+  cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
   cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
   cat('\n\n###Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
   cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
@@ -137,9 +147,17 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
 
 #' Compile a set of markdown documents and convert with pandoc
 #' @param input Vector of markdown documents
-#' @param output The output file name. Pandoc will use the extension info to create a file of the right type.
+#' @param outdir The directory to store the output in
+#' @param output The output base file name. You'll receive <output>.pdf and <output>.html files.
+#' @param css The css file with formatting info.
 #' @export
 #FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "presentations.md"), output="OMearaCV.pdf") {
-FinalCompileCV <- function(input = c("head.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "presentations.md"), output="OMearaCV.pdf") {
-  system(paste("pandoc -o ", output, " ", paste(input, collapse=" "), sep=""))
+FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv")), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV") {
+  original.wd <- getwd()
+  setwd(outdir)
+  system(paste("pandoc --css ", css, " -o ", output, ".html ", paste(input, collapse=" "), sep=""))
+  print(paste("HTML file ", output, " has been created in ", outdir, sep=""))
+  system(paste("wkhtmltopdf ", output, ".html ", output, ".pdf", sep=""))
+  print(paste("PDF file ", output, " has been created in ", outdir, sep=""))
+  setwd(original.wd)
 }
