@@ -139,6 +139,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
 #' @param input Vector of markdown documents
 #' @param output The output file name. Pandoc will use the extension info to create a file of the right type.
 #' @export
-FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "talks.md"), output="OMearaCV.pdf") {
+#FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "presentations.md"), output="OMearaCV.pdf") {
+FinalCompileCV <- function(input = c("head.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "presentations.md"), output="OMearaCV.pdf") {
   system(paste("pandoc -o ", output, " ", paste(input, collapse=" "), sep=""))
 }
