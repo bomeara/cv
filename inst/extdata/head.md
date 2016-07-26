@@ -10,6 +10,6 @@ Dept. of Ecology and Evolutionary Biology
 
 University of Tennessee, Knoxville
 
-# Research
+## Research
 
 I address questions in evolutionary biology through development, implementation, and application of new phylogenetic methods. These include approaches for examining the process of continuous trait evolution (rate, optimal values, and other factors), species delimitation, phylogeography, diversification analyses, biogeography, and more. I also collaborate extensively with empiricists, including some of my own students.
