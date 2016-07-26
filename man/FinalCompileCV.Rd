@@ -4,10 +4,9 @@
 \alias{FinalCompileCV}
 \title{Compile a set of markdown documents and convert with pandoc}
 \usage{
-FinalCompileCV(input = c("head.md", "summary.md", "education.md",
-  "employment.md", "publications.md", "teaching.md", "funding.md", "service.md",
-  "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md",
-  "software.md", "talks.md"), output = "OMearaCV.pdf")
+FinalCompileCV(input = c("head.md", "education.md", "employment.md",
+  "publications.md", "teaching.md", "funding.md", "presentations.md"),
+  output = "OMearaCV.pdf")
 }
 \arguments{
 \item{input}{Vector of markdown documents}

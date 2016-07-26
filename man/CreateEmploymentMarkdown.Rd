@@ -4,7 +4,7 @@
 \alias{CreateEmploymentMarkdown}
 \title{Create a Markdown document of employment history from biographical info}
 \usage{
-CreateEmploymentMarkdown(orcid.info, outdir = ".")
+CreateEmploymentMarkdown(orcid.info, outdir = tempdir())
 }
 \arguments{
 \item{orcid.info}{The list of info from orcid}

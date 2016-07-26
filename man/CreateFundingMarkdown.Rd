@@ -4,8 +4,8 @@
 \alias{CreateFundingMarkdown}
 \title{Create a Markdown document of funding from biographical info}
 \usage{
-CreateFundingMarkdown(orcid.info, outdir = ".",
-  additional.te = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRFP, and various internal grants at UC Davis).")
+CreateFundingMarkdown(orcid.info, outdir = tempdir(),
+  additional.te = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRF, and various internal grants at UC Davis).")
 }
 \arguments{
 \item{orcid.info}{The list of info from orcid}

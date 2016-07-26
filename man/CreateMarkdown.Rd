@@ -4,7 +4,7 @@
 \alias{CreateMarkdown}
 \title{Create a Markdown document from biographical info}
 \usage{
-CreateMarkdown(orcid.info = GetInfoFromOrcid(), outdir = ".")
+CreateMarkdown(orcid.info = GetInfoFromOrcid(), outdir = tempdir())
 }
 \arguments{
 \item{orcid.info}{The list of info from orcid}
