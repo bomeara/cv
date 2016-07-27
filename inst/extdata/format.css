@@ -92,4 +92,9 @@ hr {
 table {
     width: 100%;
 }
+
+/* below line added by Brian O'Meara */
+tr:nth-child(even) {background-color: #f2f2f2}
+
+
 </style>

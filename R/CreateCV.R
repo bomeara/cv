@@ -25,13 +25,15 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
 #' Create a Markdown document from biographical info
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
+#' @param emphasis.name The name to bold in the publications list. Presumably your own.
 #' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
+#' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
 #' @export
-CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), scholar.id="vpjEkQwAAAAJ") {
+CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), emphasis.name="O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997") {
 	CreateEducationMarkdown(orcid.info, outdir)
 	CreateEmploymentMarkdown(orcid.info, outdir)
 	CreateFundingMarkdown(orcid.info, outdir)
-  CreatePublicationsMarkdown(orcid.info, outdir, scholar.id)
+  CreatePublicationsMarkdown(orcid.info, outdir, emphasis.name, scholar.id, impact.story.id)
 
 }
 
@@ -76,7 +78,8 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
 		funding.string <- '\n\n## Funding\n\n'
 		funding.string <- paste(funding.string, additional.te, sep="")
 		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------- | -------- | ------ |', sep="")
-		for (i in sequence(dim(orcid.info$funding)[1])) {
+    orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
+  	for (i in sequence(dim(orcid.info$funding)[1])) {
 			organization <- orcid.info$funding[i,]$organization.name
 			if (grepl("National Science Foundation", organization, ignore.case=FALSE)) {
 				organization <- 'NSF'
@@ -84,7 +87,7 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
 			if (grepl("National Institutes of Health", organization, ignore.case=FALSE)) {
 				organization <- 'NIH'
 			}
-			funding.string <- paste(funding.string, '\n| ', orcid.info$funding[i,]$'start-date.year.value', ' | ', orcid.info$funding[i,]$'funding-title.title.value', ' | ', organization, ' | $', orcid.info$funding[i,]$'amount.value', ' |', sep="")
+			funding.string <- paste(funding.string, '\n| ', orcid.info$funding[i,]$'start-date.year.value', ' | ', orcid.info$funding[i,]$'funding-title.title.value', ' | ', organization, ' | $', prettyNum(as.numeric(orcid.info$funding[i,]$'amount.value'), big.mark=",", scientific=FALSE), ' |', sep="")
 
 
 	#		funding.string <- paste(funding.string, '\n\n', orcid.info$funding[i,]$'funding-title.title.value', " ",	orcid.info$funding[i,]$organization.name, ': ', orcid.info$funding[i,]$'role-title', " (", orcid.info$funding[i,]$'end-date.year.value', "): $", orcid.info$funding[i,]$'amount.value', sep='')
@@ -116,8 +119,10 @@ CleanNames <- function(citations) {
 #' @param outdir The directory to store the markdown file in
 #' @param emphasis.name The name to bold in the publications list. Presumably your own.
 #' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
+#' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
+#' @param badges Vector of ImpactStory badge names you want to show (a lot are goofy).
 #' @export
-CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ") {
+CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997", badges=c("big_hit", "global_reach", "depsy")) {
 	cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
 	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
@@ -135,7 +140,24 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
     g.profile <- NULL
     try(g.profile <- scholar::get_profile(scholar.id))
     if(!is.null(g.profile)) {
-      cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, sep=""), , file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+      cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however).", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+    }
+  }
+
+  if(!is.null(impact.story.id)) {
+    i.profile <- NULL
+    try(i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep="")))
+    if(!is.null(i.profile)) {
+      if(any(i.profile$badges$name %in% badges)) {
+        cat(paste('\n\nAccording to NSF-funded [ImpactStory.org](https://impactstory.org/u/', impact.story.id, '), a source of altmetrics data (a measure of impact beyond citations), my work has various impacts:',   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+        for (badge.index in sequence(length(badges))) {
+          if(badges[badge.index] %in% i.profile$badges$name) {
+            matching.row <- which(i.profile$badges$name==badges[badge.index])
+            cat(paste('\n* ', gsub("Your", "My", gsub("your", "my", i.profile$badges$description[matching.row])), " ",i.profile$badges$context[matching.row],   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+
+          }
+        }
+      }
     }
   }
   cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)

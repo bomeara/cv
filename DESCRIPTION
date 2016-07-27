@@ -5,11 +5,11 @@ Author: Brian O'Meara <omeara.brian@gmail.com>
 Maintainer: Brian O'Meara <omeara.brian@gmail.com>
 Description: Use ORCID data to create a CV. Note this uses a style sheet from Christophe-Marie Duquesne, https://github.com/mszep/pandoc_resume/blob/master/style_chmduquesne.css
 Depends:
-    R (>= 3.2.3)
+    R (>= 3.2.3), scholar
 SystemRequirements:
     wkhtmltopdf, pandoc
 Imports:
-    rorcid, RefManageR, scholar
+    rorcid, RefManageR, jsonlite
 Suggests:
     testthat
 License: GPL (>=2)

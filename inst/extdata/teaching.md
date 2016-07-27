@@ -2,7 +2,7 @@
 
 ##Teaching
 
-### University courses
+### University Courses
 
 I created a course on macroevolution targeted at upper level undergraduate and graduate students: we cover diversification, symbiosis, game theory, and more. I have also taught large introductory courses and small discussion seminars. In Spring 2016, as part of an NSF CAREER grant, I started a mixed online and in person course on phylogenetic methods. It is being revised to be taught again in Spring 2017. Note that the "HOFF joint lab group discussion" was a collaborative lab group meeting of the Hulsey-O'Meara-Fordyce-Fitzpatrick labs.
 
