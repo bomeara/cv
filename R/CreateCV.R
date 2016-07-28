@@ -49,7 +49,7 @@ CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), em
 #' that is, corrections for errors. Shouldn't really count, I think.
 #' @export
 CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.offset=-2, prominent.pubs='*Science, Nature, Ann. Rev Ecology, Evolution & Systematics, Systematic Biology, Evolution*, etc.') {
-  results <- data.frame(matrix(nrow=5, ncol=2))
+  results <- data.frame(matrix(nrow=6, ncol=2))
   colnames(results) <- c("", "")
   results[1,1] <- '**Publications**'
   results[1,2] <- paste(length(orcid.info$journals)+publications.offset, " journal articles, including ", prominent.pubs, sep="")
@@ -66,6 +66,15 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
 
   results[5,1] <- '**Funding**'
   results[5,2] <- paste("$",round((1e-6)*sum(as.numeric(orcid.info$funding$amount.value)),2), "M in external support, including ", sum(grepl("National Science Foundation", orcid.info$funding$organization.name)), " NSF grants (including a CAREER grant) plus funding from iPlant and Encyclopedia of Life", sep="")
+  
+  scholar.id="vpjEkQwAAAAJ"
+  impact.story.id = "0000-0002-0337-5997"
+  g.profile <- scholar::get_profile(scholar.id)
+  github.user <- jsonlite::fromJSON(txt="https://api.github.com/users/bomeara")
+  i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep=""))
+  i.sources <- i.profile$sources
+  results[6,1] <- '**Altmetrics**'
+  results[6,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdos number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
 
   cat('\n\n##Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)
   cat(capture.output(knitr::kable(results, row.names=FALSE)), file=paste(outdir, "/summary.md", sep=""), sep='\n', append=TRUE)
