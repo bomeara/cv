@@ -229,8 +229,8 @@ FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="
   original.wd <- getwd()
   setwd(outdir)
   system(paste("pandoc --css ", css, " -o ", output, ".html ", paste(input, collapse=" "), sep=""))
-  print(paste("HTML file ", output, " has been created in ", outdir, sep=""))
+  print(paste("HTML file ", output, ".html has been created in ", outdir, sep=""))
   system(paste("wkhtmltopdf ", output, ".html ", output, ".pdf", sep=""))
-  print(paste("PDF file ", output, " has been created in ", outdir, sep=""))
+  print(paste("PDF file ", output, ".pdf has been created in ", outdir, sep=""))
   setwd(original.wd)
 }
