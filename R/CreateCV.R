@@ -137,19 +137,19 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   postdocs <- postdocs[order(postdocs$Last),]
   postdocs.pretty <- postdocs[,c("Name", "Duration", "NIMBioS", "CurrentPosition")]
   names(postdocs.pretty)[4] <- "Current Position"
-  cat(capture.output(kable(postdocs.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat(capture.output(knitr::kable(postdocs.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
   cat('\n\n##Mentoring, Grad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   grads <- subset(people, Stage=="PhD student")
   grads <- grads[order(grads$Last),]
   grads.pretty <- grads[,c("Name","Stage", "Duration", "Note")]
-  cat(capture.output(kable(grads.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat(capture.output(knitr::kable(grads.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
   cat('\n\n##Mentoring, Grad student committees\n\nIn addition to my own students, of course.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   com <- subset(people, Stage=="Committee")
   com <- com[order(com$Last),]
   com.pretty <- com[,c("Name","Department")]
-  cat(capture.output(kable(com.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat(capture.output(knitr::kable(com.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
 
 }
