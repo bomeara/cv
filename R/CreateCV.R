@@ -34,7 +34,8 @@ CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), em
 	CreateEmploymentMarkdown(orcid.info, outdir)
 	CreateFundingMarkdown(orcid.info, outdir)
   CreatePublicationsMarkdown(orcid.info, outdir, emphasis.name, scholar.id, impact.story.id)
-
+  CreatePeopleMarkdown(outdir=outdir)
+  CreateServiceMarkdown(outdir=outdir)
 }
 
 #' Create a Markdown document of education from biographical info
@@ -120,9 +121,49 @@ CleanNames <- function(citations) {
 #' @param infile The path to the text delimited file
 #' @param outdir The directory to store the markdown file in
 CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt", package="cv"), outdir=tempdir()) {
-  people <- read.delim2(infile)
-  
+  people <- read.delim2(infile, stringsAsFactors=FALSE)
+  people$Stop <- as.character(people$Stop)
+  people$Stop[is.na(people$Stop)] <- "present"
+  people$Duration <- paste(people$Start,"-",people$Stop, sep="")
+  people$Name <- paste(people$First,people$Last)
+  for (i in sequence(dim(people)[1])) {
+    if(nchar(people$URL[i])>3) {
+      people$Name[i] <- paste("[", people$First[i], " ",people$Last[i],"](",people$URL[i], ")", sep="")
+    }
+  }
+
+  cat('\n\n##Mentoring, Postdocs\n\nI have mentored numerous postdocs off of my own grants and/or as one of their chosen NIMBioS mentors. Note that NIMBioS postdocs pursue independent research projects but choose one faculty member to mentor them in math and another to mentor them in biology (I have served in both roles).', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
+  postdocs <- subset(people, Stage=="Postdoc")
+  postdocs <- postdocs[order(postdocs$Last),]
+  postdocs.pretty <- postdocs[,c("Name", "Duration", "NIMBioS", "CurrentPosition")]
+  names(postdocs.pretty)[4] <- "Current Position"
+  cat(capture.output(kable(postdocs.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+
+  cat('\n\n##Mentoring, Grad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  grads <- subset(people, Stage=="PhD student")
+  grads <- grads[order(grads$Last),]
+  grads.pretty <- grads[,c("Name","Stage", "Duration", "Note")]
+  cat(capture.output(kable(grads.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+
+  cat('\n\n##Mentoring, Grad student committees\n\nIn addition to my own students, of course.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  com <- subset(people, Stage=="Committee")
+  com <- com[order(com$Last),]
+  com.pretty <- com[,c("Name","Department")]
+  cat(capture.output(kable(com.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+
+
 }
+
+#' Create a Markdown document of funding from biographical info
+#' @param infile The path to the text delimited file
+#' @param outdir The directory to store the markdown file in
+CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt", package="cv"), outdir=tempdir()) {
+  service <- read.delim2(infile, stringsAsFactors=FALSE)
+  cat('\n\n##Service\n\n', file=paste(outdir, "/service.md", sep=""), sep='\n', append=FALSE)
+  service$Service <- paste("*", service$Service)
+  cat(service$Service, file=paste(outdir, "/service.md", sep=""), sep='\n', append=TRUE)
+}
+
 
 #' Create a Markdown document of funding from biographical info
 #' @param orcid.info The list of info from orcid
@@ -184,7 +225,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
 #' @param css The css file with formatting info.
 #' @export
 #FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "presentations.md"), output="OMearaCV.pdf") {
-FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv")), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV") {
+FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv"), "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV") {
   original.wd <- getwd()
   setwd(outdir)
   system(paste("pandoc --css ", css, " -o ", output, ".html ", paste(input, collapse=" "), sep=""))
