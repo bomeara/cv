@@ -1,10 +1,10 @@
 # Brian C. O'Meara
 
-http://www.brianomeara.info
+[http://www.brianomeara.info](http://www.brianomeara.info)
 
 865-974-2804
 
-bomeara@utk.edu
+[bomeara@utk.edu](mailto:bomeara@utk.edu)
 
 Dept. of Ecology and Evolutionary Biology
 

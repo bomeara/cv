@@ -30,13 +30,48 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
 #' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
 #' @export
 CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), emphasis.name="O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997") {
-	CreateEducationMarkdown(orcid.info, outdir)
+  CreateSummaryMarkdown(orcid.info, outdir)
+  CreateEducationMarkdown(orcid.info, outdir)
 	CreateEmploymentMarkdown(orcid.info, outdir)
 	CreateFundingMarkdown(orcid.info, outdir)
   CreatePublicationsMarkdown(orcid.info, outdir, emphasis.name, scholar.id, impact.story.id)
   CreatePeopleMarkdown(outdir=outdir)
   CreateServiceMarkdown(outdir=outdir)
 }
+
+#' Create a Markdown document to summarize me
+#' @param orcid.info The list of info from orcid
+#' @param outdir The directory to store the markdown file in
+#' @param publications.offset How to change the publication count.
+#'
+#' You may want an offset if some of your publications shouldn't count.
+#' For example, I have two Nature "papers" that are actually corrigendia,
+#' that is, corrections for errors. Shouldn't really count, I think.
+#' @export
+CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.offset=-2, prominent.pubs='*Science, Nature, Ann. Rev Ecology, Evolution & Systematics, Systematic Biology, Evolution*, etc.') {
+  results <- data.frame(matrix(nrow=5, ncol=2))
+  colnames(results) <- c("", "")
+  results[1,1] <- '**Publications**'
+  results[1,2] <- paste(length(orcid.info$journals)+publications.offset, " journal articles, including ", prominent.pubs, sep="")
+
+  results[2,1] <- '**Teaching**'
+  results[2,2] <- "Approximately 4 courses per year on average, ranging from large introductory biology courses to small graduate seminars"
+
+  results[3,1] <- '**Mentoring**'
+  people <- read.delim2(system.file("extdata", "people.txt", package="cv"), stringsAsFactors=FALSE)
+  results[3,2] <- paste(sum(grepl("PhD student", people$Stage)), " PhD students, ", sum(grepl("Postdoc", people$Stage)), " postdocs, and served on ", sum(grepl("Committee", people$Stage)), " graduate student committees", sep="")
+
+  results[4,1] <- '**Service/Outreach**'
+  results[4,2] <- 'Darwin Day TN advisor, co-organizer of women in science symposium, workshops, and other activities, co-organizer for national meetings, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'
+
+  results[5,1] <- '**Funding**'
+  results[5,2] <- paste("$",round((1e-6)*sum(as.numeric(orcid.info$funding$amount.value)),2), "M in external support, including ", sum(grepl("National Science Foundation", orcid.info$funding$organization.name)), " NSF grants (including a CAREER grant) plus funding from iPlant and Encyclopedia of Life", sep="")
+
+  cat('\n\n##Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)
+  cat(capture.output(knitr::kable(results, row.names=FALSE)), file=paste(outdir, "/summary.md", sep=""), sep='\n', append=TRUE)
+
+}
+
 
 #' Create a Markdown document of education from biographical info
 #' @param orcid.info The list of info from orcid
@@ -78,7 +113,7 @@ CreateEmploymentMarkdown <- function(orcid.info, outdir=tempdir()) {
 CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRF, and various internal grants at UC Davis).") {
 		funding.string <- '\n\n## Funding\n\n'
 		funding.string <- paste(funding.string, additional.te, sep="")
-    funding.string <- paste(funding.string, paste(" Total external funding as a faculty member is $", prettyNum(sum(orcid.info$funding), big.mark=",", scientific=FALSE), sep=""), sep="")
+    funding.string <- paste(funding.string, paste(" Total external funding, so far, as a faculty member is $", prettyNum(sum(as.numeric(orcid.info$funding$amount.value)), big.mark=",", scientific=FALSE), ".", sep=""), sep="")
 
 		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------- | -------- | ------ |', sep="")
     orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
@@ -145,6 +180,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   grads <- subset(people, Stage=="PhD student")
   grads <- grads[order(grads$Last),]
   grads.pretty <- grads[,c("Name","Stage", "Duration", "Note")]
+  names(grads.pretty)[3] <- "Time in Lab"
   cat(capture.output(knitr::kable(grads.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
   cat('\n\n##Mentoring, Grad student committees\n\nIn addition to my own students, of course.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
@@ -188,7 +224,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
   chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
   chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
 
-  cat('\n\n##Publications', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n##Publications: Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
   if(!is.null(scholar.id)) {
     g.profile <- NULL
     try(g.profile <- scholar::get_profile(scholar.id))
@@ -213,9 +249,10 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
       }
     }
   }
-  cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  #cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  cat('\n\n', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
   cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-  cat('\n\n###Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
+  cat('\n\n##Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
   cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 }
 
@@ -227,7 +264,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
 #' @param css The css file with formatting info.
 #' @export
 #FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "presentations.md"), output="OMearaCV.pdf") {
-FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv"), "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV") {
+FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "summary.md", "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv"), "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV") {
   original.wd <- getwd()
   setwd(outdir)
   system(paste("pandoc --css ", css, " -o ", output, ".html ", paste(input, collapse=" "), sep=""))
