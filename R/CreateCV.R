@@ -114,6 +114,16 @@ CleanNames <- function(citations) {
 	return(citations)
 }
 
+
+
+#' Create a Markdown document of funding from biographical info
+#' @param infile The path to the text delimited file
+#' @param outdir The directory to store the markdown file in
+CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt", package="cv"), outdir=tempdir()) {
+  people <- read.delim2(infile)
+  
+}
+
 #' Create a Markdown document of funding from biographical info
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
