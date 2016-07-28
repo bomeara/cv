@@ -78,6 +78,8 @@ CreateEmploymentMarkdown <- function(orcid.info, outdir=tempdir()) {
 CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRF, and various internal grants at UC Davis).") {
 		funding.string <- '\n\n## Funding\n\n'
 		funding.string <- paste(funding.string, additional.te, sep="")
+    funding.string <- paste(funding.string, paste(" Total external funding as a faculty member is $", prettyNum(sum(orcid.info$funding), big.mark=",", scientific=FALSE), sep=""), sep="")
+
 		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------- | -------- | ------ |', sep="")
     orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
   	for (i in sequence(dim(orcid.info$funding)[1])) {
@@ -117,7 +119,7 @@ CleanNames <- function(citations) {
 
 
 
-#' Create a Markdown document of funding from biographical info
+#' Create a Markdown document of people in the lab from biographical info
 #' @param infile The path to the text delimited file
 #' @param outdir The directory to store the markdown file in
 CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt", package="cv"), outdir=tempdir()) {
@@ -137,24 +139,24 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   postdocs <- postdocs[order(postdocs$Last),]
   postdocs.pretty <- postdocs[,c("Name", "Duration", "NIMBioS", "CurrentPosition")]
   names(postdocs.pretty)[4] <- "Current Position"
-  cat(capture.output(knitr::kable(postdocs.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat(capture.output(knitr::kable(postdocs.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
   cat('\n\n##Mentoring, Grad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   grads <- subset(people, Stage=="PhD student")
   grads <- grads[order(grads$Last),]
   grads.pretty <- grads[,c("Name","Stage", "Duration", "Note")]
-  cat(capture.output(knitr::kable(grads.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat(capture.output(knitr::kable(grads.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
   cat('\n\n##Mentoring, Grad student committees\n\nIn addition to my own students, of course.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   com <- subset(people, Stage=="Committee")
   com <- com[order(com$Last),]
   com.pretty <- com[,c("Name","Department")]
-  cat(capture.output(knitr::kable(com.pretty)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat(capture.output(knitr::kable(com.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
 
 }
 
-#' Create a Markdown document of funding from biographical info
+#' Create a Markdown document of service from biographical info
 #' @param infile The path to the text delimited file
 #' @param outdir The directory to store the markdown file in
 CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt", package="cv"), outdir=tempdir()) {
@@ -165,7 +167,7 @@ CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt
 }
 
 
-#' Create a Markdown document of funding from biographical info
+#' Create a Markdown document of publications from orcid
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in
 #' @param emphasis.name The name to bold in the publications list. Presumably your own.
