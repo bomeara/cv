@@ -192,6 +192,13 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   names(grads.pretty)[3] <- "Time in Lab"
   cat(capture.output(knitr::kable(grads.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
+  cat('\n\n##Mentoring, Undergrad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  undergrads <- subset(people, Stage=="Undergrad")
+  undergrads <- undergrads[order(undergrads $Last),]
+  undergrads.pretty <- undergrads[,c("Name","Stage", "Duration", "Note")]
+  names(undergrads.pretty)[3] <- "Time in Lab"
+  cat(capture.output(knitr::kable(undergrads.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+
   cat('\n\n##Mentoring, Grad student committees\n\nIn addition to my own students, of course.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   com <- subset(people, Stage=="Committee")
   com <- com[order(com$Last),]
