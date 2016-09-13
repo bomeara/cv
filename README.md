@@ -18,4 +18,4 @@ CreateMarkdown(GetInfoFromOrcid(id="0000-0002-0337-5997"), emphasis.name="O'Mear
 FinalCompileCV(output="OMearaCV")
 ```
 
-You'll probably want to change the id and names to your own rather than mine (for one thing, this could make it more likely to get the job you want).
+You'll probably want to change the id and names to your own rather than mine (for one thing, this could make it more likely to get the job you want). There are also files in /inst/extdata you will need to change.
