@@ -227,7 +227,7 @@ CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt
 #' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
 #' @param badges Vector of ImpactStory badge names you want to show (a lot are goofy).
 #' @export
-CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997", badges=c("big_hit", "global_reach", "depsy")) {
+CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997", badges=c("global_reach", "depsy")) {
 	cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
 	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
