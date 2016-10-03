@@ -3,7 +3,7 @@ This is an R package for creating a CV using information from Google Scholar, Gi
 
 To install
 
-```
+```{r}
 install.packages("devtools")
 devtools::install_github("bomeara/cv")
 ```
@@ -12,7 +12,7 @@ You will also need wkhtmltopdf and pandoc installed on your system (for Mac user
 
 Once you've installed the package,
 
-```
+```{r}
 library(cv)
 CreateMarkdown(GetInfoFromOrcid(id="0000-0002-0337-5997"), emphasis.name="O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997")
 FinalCompileCV(output="OMearaCV")
