@@ -1,7 +1,7 @@
 First	Last	Stage	Done	NIMBioS	Start	Stop	Department	URL	CurrentPosition	Note
 Barb	Banbury	Postdoc	Y	N	2010	2012		https://www.linkedin.com/in/bbanbury	Statistical Analyst at Fred Hutch
-Jeremy	Beaulieu	Postdoc	Y	Both	2012	2016			http://www.jeremybeaulieu.org/	Assistant Professor at U. of Arkansas
-Nathan	Jackson	Postdoc	Y	N	2013	2016			http://nathandjackson.com/ Researcher at National Jewish Health
+Jeremy	Beaulieu	Postdoc	Y	Both	2012	2016		http://www.jeremybeaulieu.org/	Assistant Professor at U. of Arkansas
+Nathan	Jackson	Postdoc	Y	N	2013	2016		http://nathandjackson.com/ Researcher at National Jewish Health
 Sandy	Kawano	Postdoc	Y	Y	2014	2016		http://sandykawano.weebly.com/	Starting as Assistant Professor at  CSU Long Beach in Aug. 2017
 Megan	Rua	Postdoc	Y	Y	2015	2016		https://meganrua.wordpress.com	Assistant Professor Wright State U
 Sam	Borstein	PhD student	N	N	2014			https://fish4thought.wordpress.com/
