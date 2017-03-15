@@ -62,19 +62,22 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   results[3,2] <- paste(sum(grepl("PhD student", people$Stage)), " PhD students, ", sum(grepl("Postdoc", people$Stage)), " postdocs, and served on ", sum(grepl("Committee", people$Stage)), " graduate student committees", sep="")
 
   results[4,1] <- '**Service/Outreach**'
-  results[4,2] <- 'Darwin Day TN advisor, co-organizer of women in science symposium, workshops, and other activities, co-organizer for national meetings, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'
+  results[4,2] <- 'Darwin Day TN advisor, co-organizer of women in science symposium, workshops, and other activities, co-organizer for scientific meetings, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'
 
-  results[5,1] <- '**Funding**'
-  results[5,2] <- paste("$",round((1e-6)*sum(as.numeric(orcid.info$funding$amount.value)),2), "M in external support, including ", sum(grepl("National Science Foundation", orcid.info$funding$organization.name)), " NSF grants (including a CAREER grant) plus funding from iPlant and Encyclopedia of Life", sep="")
-  
+  results[5,1] <- '**Leadership**'
+  results[5,2] <- 'Associate Head for Dept. of Ecology & Evolutionary Biology, 2016-present; Associate Director for the National Institute for Mathematical and Biological Synthesis, 2016-present; Communications Director for the Society of Systematic Biologists, 2016-present; Society of Systematic Biologists Council, 2012-2014; iEvoBio co-organizer, 2014-2016.'
+
+  results[6,1] <- '**Funding**'
+  results[6,2] <- paste("$",round((1e-6)*sum(as.numeric(orcid.info$funding$amount.value)),2), "M in external support, including ", sum(grepl("National Science Foundation", orcid.info$funding$organization.name)), " NSF grants (including a CAREER grant) plus funding from iPlant and Encyclopedia of Life", sep="")
+
   scholar.id="vpjEkQwAAAAJ"
   impact.story.id = "0000-0002-0337-5997"
   g.profile <- scholar::get_profile(scholar.id)
   github.user <- jsonlite::fromJSON(txt="https://api.github.com/users/bomeara")
   i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep=""))
   i.sources <- i.profile$sources
-  results[6,1] <- '**Altmetrics**'
-  results[6,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdos number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
+  results[7,1] <- '**Altmetrics**'
+  results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdos number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
 
   cat('\n\n##Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)
   cat(capture.output(knitr::kable(results, row.names=FALSE)), file=paste(outdir, "/summary.md", sep=""), sep='\n', append=TRUE)
