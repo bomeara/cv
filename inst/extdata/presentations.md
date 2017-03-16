@@ -4,6 +4,8 @@
 
 **Bold** indicates presentation was delivered by me; otherwise, I was a coauthor. Also see various workshops under teaching.
 
+**March 2017**: Invited talk on three projects at U. of Idaho, Moscow
+
 **September 2016**: Symposium talk on Approximate Bayesian computation for trait evolution on phylogenies at Geological Society of America annual meeting.
 
 August 2016: Talk on linking leaf spectra to phylogenies at Ecological Society of America 2016 annual meeting. Jose Eduardo Meireles, Brian O’Meara, Anna Schweiger, Aditya Singh, Phil Townsend, Susan Ustin, Michael Schaepman, Franziska Schrodt, John Gamon and Jeannine Cavender-Bares. Linking leaf spectra to phylogenies. 

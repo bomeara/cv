@@ -44,5 +44,5 @@ Rachel	Wooliver	Committee	N				EEB
 Sarah	Sheffield	Committee	N				EEB
 Jen	Bauer	Committee	N				EEB
 Ryan	Rooney	Committee	N				EEB
-Sergei	Tarasov	Postdoc	N	Y	2016			https://sites.google.com/site/starasovresearch/ NIMBioS postdoc
+Sergei	Tarasov	Postdoc	N	Y	2016			https://sites.google.com/site/starasovresearch/	NIMBioS postdoc
 Jasper	Lee	Committee	N				Microbiology

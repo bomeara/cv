@@ -8,6 +8,8 @@ I created a course on macroevolution targeted at upper level undergraduate and g
 
 | Year | Semester | Course Number | Topic | Enrollment  | Percent Effort |
 | ---- | ------- | ------- | ----- | -----------| ------ |
+| 2017 | Spring | EEB603 | PhyloMeth | 6 students | 100 |
+| 2017 | Spring | EEB504 | PhyloMeth | 2 students | 100 |
 | 2016 | Fall | EEB464 | Macroevolution | 28 | 100 |
 | 2016 | Spring | Biology150 | Introductory biology | 235 | 100 |
 | 2016 | Spring | EEB603 | PhyloMeth | 9 enrolled, plus dozens online | 100 |
@@ -46,6 +48,7 @@ I organize and/or participate in numerous workshops or tutorials.
 
 | Year | Location | Topic | Role |
 | ---- | -------- | ----- | ---- |
+| 2017 | Baton Rouge, LA | PHRAPL | Organizer/instructor |
 | 2016 | Knoxville, TN | Evolutionary Quantitative Genetics workshop at NIMBioS | Instructor |
 | 2015 | Ann Arbor, MI | Comparative methods in R, SSB satellite meeting | Organizer/instructor |
 | 2015 | Knoxville, TN | Evolutionary Quantitative Genetics workshop at NIMBioS | Instructor |
