@@ -15,4 +15,3 @@ Same object, but with curly quotes and similar evil symbols fixed
 \description{
 Apostophes cause problems. This will fix them.
 }
-

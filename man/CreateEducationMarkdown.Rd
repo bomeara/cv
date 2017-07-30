@@ -14,4 +14,3 @@ CreateEducationMarkdown(orcid.info, outdir = tempdir())
 \description{
 Create a Markdown document of education from biographical info
 }
-

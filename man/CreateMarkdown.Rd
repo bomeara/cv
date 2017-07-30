@@ -4,14 +4,21 @@
 \alias{CreateMarkdown}
 \title{Create a Markdown document from biographical info}
 \usage{
-CreateMarkdown(orcid.info = GetInfoFromOrcid(), outdir = tempdir())
+CreateMarkdown(orcid.info = GetInfoFromOrcid(), outdir = tempdir(),
+  emphasis.name = "O'Meara", scholar.id = "vpjEkQwAAAAJ",
+  impact.story.id = "0000-0002-0337-5997")
 }
 \arguments{
 \item{orcid.info}{The list of info from orcid}
 
 \item{outdir}{The directory to store the markdown file in}
+
+\item{emphasis.name}{The name to bold in the publications list. Presumably your own.}
+
+\item{scholar.id}{Your ID on Google Scholar. NULL if you don't want to use this.}
+
+\item{impact.story..id}{Your ID on ImpactStory. NULL if you don't want to use this.}
 }
 \description{
 Create a Markdown document from biographical info
 }
-

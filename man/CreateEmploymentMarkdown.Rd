@@ -14,4 +14,3 @@ CreateEmploymentMarkdown(orcid.info, outdir = tempdir())
 \description{
 Create a Markdown document of employment history from biographical info
 }
-

@@ -222,6 +222,39 @@ CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt
 }
 
 
+#' Get collaborators from past time period
+#' @param orcid.info The list of info from orcid
+#' @param starting.year What year to start including collaborators
+#' @param outdir The directory to store the temporary markdown file in
+#' @return data.frame with the authors and the papers in the time period
+#' @export
+GetCollaborators <- function(orcid.info, starting.year=2013, outdir=tempdir()) {
+  cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
+	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
+	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
+  publications <- publications[which(as.numeric(publications$year)>=starting.year)]
+  CollapseName <- function(x) {
+    x <- (unlist(x))
+    return(paste0(x[grepl("family", names(x))], ", ", paste(x[grepl("given", names(x))], collapse=" ")))
+  }
+  all.authors <- c()
+  all.publications <- c()
+  for (i in sequence(length(publications))) {
+    all.authors <- append(all.authors, sapply(publications[i]$author, CollapseName))
+    all.publications <- append(all.publications, rep(paste0(publications[i]$title, " (", publications[i]$year, ")"), length(publications[i]$author)))
+  }
+  authors.df <- data.frame(coauthor=all.authors, publication=all.publications, stringsAsFactors=FALSE)
+  all.aggregation <- aggregate(authors.df, by=list(authors.df$coauthor), FUN=paste, collapse="; ")[,-2]
+  names(all.aggregation)[1] <- "coauthor"
+  all.aggregation[,2] <- as.character(all.aggregation[,2])
+  #all.authors <- sort(all.authors)
+
+  #all.authors.table <- table(all.authors)
+  #all.authors <- unique(all.authors)
+  return(all.aggregation)
+}
+
+
 #' Create a Markdown document of publications from orcid
 #' @param orcid.info The list of info from orcid
 #' @param outdir The directory to store the markdown file in

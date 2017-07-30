@@ -4,16 +4,22 @@
 \alias{FinalCompileCV}
 \title{Compile a set of markdown documents and convert with pandoc}
 \usage{
-FinalCompileCV(input = c("head.md", "education.md", "employment.md",
-  "publications.md", "teaching.md", "funding.md", "presentations.md"),
-  output = "OMearaCV.pdf")
+FinalCompileCV(input = c(system.file("extdata", "head.md", package = "cv"),
+  "summary.md", "education.md", "employment.md", "publications.md",
+  system.file("extdata", "teaching.md", package = "cv"), "funding.md",
+  system.file("extdata", "presentations.md", package = "cv"), "people.md",
+  "service.md"), outdir = tempdir(), css = system.file("extdata",
+  "format.css", package = "cv"), output = "OMearaCV")
 }
 \arguments{
 \item{input}{Vector of markdown documents}
 
-\item{output}{The output file name. Pandoc will use the extension info to create a file of the right type.}
+\item{outdir}{The directory to store the output in}
+
+\item{css}{The css file with formatting info.}
+
+\item{output}{The output base file name. You'll receive <output>.pdf and <output>.html files.}
 }
 \description{
 Compile a set of markdown documents and convert with pandoc
 }
-

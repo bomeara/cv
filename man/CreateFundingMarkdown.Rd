@@ -15,4 +15,3 @@ CreateFundingMarkdown(orcid.info, outdir = tempdir(),
 \description{
 Create a Markdown document of funding from biographical info
 }
-

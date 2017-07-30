@@ -15,4 +15,3 @@ A list of info from ORCID
 \description{
 Pull in info from ORCID
 }
-
