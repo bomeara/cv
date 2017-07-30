@@ -18,6 +18,17 @@ CreateMarkdown(GetInfoFromOrcid(id="0000-0002-0337-5997"), emphasis.name="O'Mear
 FinalCompileCV(output="OMearaCV")
 ```
 
+If you want to just get collaborators for an NSF form,
+
+```
+library(cv)
+collaborators <- GetCollaborators(GetInfoFromOrcid(id="0000-0002-0337-5997"), starting.year=2013)
+print(collaborators)
+write.csv(collaborators, file="Collaborators.csv")
+```
+
+You can open the saved csv file.
+
 You'll probably want to change the id and names to your own rather than mine (for one thing, this could make it more likely to get the job you want). There are also files in /inst/extdata you will need to change.
 
 You can see an example of the output at http://www.brianomeara.info/cv.
