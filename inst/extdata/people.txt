@@ -5,8 +5,8 @@ Nathan	Jackson	Postdoc	Y	N	2013	2016		http://nathandjackson.com/	Researcher at N
 Sandy	Kawano	Postdoc	Y	Y	2014	2016		http://sandykawano.weebly.com/	Starting as Assistant Professor at  CSU Long Beach in Aug. 2017
 Megan	Rua	Postdoc	Y	Y	2015	2016		https://meganrua.wordpress.com	Assistant Professor Wright State U
 Sam	Borstein	PhD student	N	N	2014			https://fish4thought.wordpress.com/
-Jenn	Bosco	PhD student (graduated)	Y	N	2012	2017		https://sites.google.com/site/jenniferboscoinfo/home		Co-advised with Susan Riechert
-Katie	Massana	PhD student (graduated)	Y	N	2012	2017		https://sites.google.com/site/kathrynamassana/home
+Jenn	Bosco	PhD student	Y	N	2012	2017		https://sites.google.com/site/jenniferboscoinfo/home		Co-advised with Susan Riechert
+Katie	Massana	PhD student	Y	N	2012	2017		https://sites.google.com/site/kathrynamassana/home
 Orlando	Schwery	PhD student	N	N	2014			https://sites.google.com/site/orlandoschwery/home
 Hugo	Alamillo	Postdoc	Y	N	2011	2012		https://people.northseattle.edu/users/halamillo	Assistant Professor North Seattle College
 Juanjuan (JJ)	Crosskey (formerly Chai)	Postdoc	Y	Y	2011	2013			Member of Comparative Genomics group at Oak Ridge National Lab
