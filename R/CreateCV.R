@@ -127,7 +127,7 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
 		funding.string <- paste(funding.string, additional.te, sep="")
     funding.string <- paste(funding.string, paste(" Total external funding, so far, as a faculty member is $", prettyNum(sum(as.numeric(orcid.info$funding$amount.value)), big.mark=",", scientific=FALSE), ".", sep=""), sep="")
 
-		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------- | -------- | ------ |', sep="")
+		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------------------------ | -------- | ------ |', sep="")
     orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
   	for (i in sequence(dim(orcid.info$funding)[1])) {
 			organization <- orcid.info$funding[i,]$organization.name
@@ -323,5 +323,9 @@ FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="
   print(paste("HTML file ", output, ".html has been created in ", outdir, sep=""))
   system(paste("wkhtmltopdf ", output, ".html ", output, ".pdf", sep=""))
   print(paste("PDF file ", output, ".pdf has been created in ", outdir, sep=""))
+  #system(paste("pandoc --css ", css, " -o ", output, "_pandoc.pdf ", paste(input, collapse=" "), sep=""))
+  system(paste("pandoc --css ", css, " -o ", output, ".md ", paste(input, collapse=" "), sep=""))
+  system(paste("pandoc --css ", css, " -o ", output, ".docx ", paste(input, collapse=" "), sep=""))
+  #system(paste("pandoc -o ", output, "_fromword.pdf ", paste0(output, ".docx"), sep=""))
   setwd(original.wd)
 }
