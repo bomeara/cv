@@ -11,6 +11,7 @@ Orlando	Schwery	PhD student	N	N	2014			https://sites.google.com/site/orlandoschw
 Hugo	Alamillo	Postdoc	Y	N	2011	2012		https://people.northseattle.edu/users/halamillo	Assistant Professor North Seattle College
 Juanjuan (JJ)	Crosskey (formerly Chai)	Postdoc	Y	Y	2011	2013			Member of Comparative Genomics group at Oak Ridge National Lab
 Tony	Jhwueng	Postdoc	Y	Y	2009	2011		http://www.tonyjhwueng.info/	"Assistant Professor Feng-Chia U., Taiwan"
+Dominic Evangelista Postdoc N N 2018    EEB https://www.roachbrain.com
 Michelle	Lawing	Postdoc	Y	Y	2012	2014		michelle lawing	Assistant Professor Texas A&M
 Nick	Matzke	Postdoc	Y	Y	2013	2015		http://nickmatzke.weebly.com	DECRA Fellow at The Australian National University in Canberra
 Ryan	Martin	Postdoc	Y	Y	2012	2013		http://www.martinevolutionaryecologylab.com	Assistant Professor Case Western U
