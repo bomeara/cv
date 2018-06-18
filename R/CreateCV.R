@@ -5,20 +5,33 @@
 #' @export
 GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   me <- rorcid::orcid_id(id)
-  me.pubs <- rorcid::works(me)$data
+  me.pubs <- rorcid::works(me)
+  journal.info <- subset(me.pubs, type=="JOURNAL_ARTICLE")
+  journal.dois <- c()
+  for (i in sequence(nrow(journal.info))) {
+    info.df <- journal.info$`external-ids.external-id`[[i]]
+    info.df <- subset(info.df, `external-id-type`=="doi")
+    if(nrow(info.df)>=1) {
+      journal.dois <- append(journal.dois, info.df$`external-id-value`[1])
+    }
+  }
+  #my.dois <- rorcid::identifiers(rorcid::works(me))
+  journals <- rcrossref::cr_cn(dois = journal.dois, format = "bibtex", .progress="text")
   # TO DO: Make sure all entries are bibtex
-  journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="JOURNAL_ARTICLE")]
-  books <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="BOOK")]
-  activities <- me[[1]]$`orcid-activities`
-  funding <- activities$`funding-list`$funding
-  affiliations <- activities$`affiliations`$affiliation
-  education <- subset(affiliations, type=="EDUCATION")
+  #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="JOURNAL_ARTICLE")]
+  other.products.raw <- subset(me.pubs, type!="JOURNAL_ARTICLE")
+  other.products.raw <- orcid_works(id, put_code=other.products.raw$`put-code`)
+  other.products <- other.products.raw$`work.citation.citation-value`
+  activities <- rorcid::orcid_activities(id)[[1]]
+  funding <- activities$funding$group
+  #affiliations <- activities$affiliation
+  education <- activities$educations$`education-summary`
   education <- education[order(education$'end-date.year.value', decreasing=TRUE),]
 
-  employment <- subset(affiliations, type=="EMPLOYMENT")
+  employment <- activities$employments$`employment-summary`
   employment <- employment[order(employment $'start-date.year.value', decreasing=TRUE),]
 
-  return(list(journals=journals, books=books, funding=funding, education=education, employment=employment))
+  return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment))
 
 }
 
