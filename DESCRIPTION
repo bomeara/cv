@@ -9,7 +9,7 @@ Depends:
 SystemRequirements:
     wkhtmltopdf, pandoc
 Imports:
-    rorcid, RefManageR, jsonlite, knitr, rcrossref
+    rorcid, RefManageR, jsonlite, knitr, rcrossref, plyr
 Suggests:
     testthat
 License: GPL (>=2)

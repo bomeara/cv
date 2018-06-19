@@ -23,7 +23,11 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   other.products.raw <- rorcid::orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
   other.products <- other.products.raw[[1]]$`work.citation.citation-value`
   activities <- rorcid::orcid_activities(id)[[1]]
-  funding <- activities$funding$group
+  funding <- plyr::rbind.fill(activities$funding$group$`funding-summary`)
+  # funding.full <- data.frame()
+  # for (i in sequence(nrow(funding))) {
+  #   local.funding <- rorcid::orcid_fundings(id, put_code=funding$`put-code`[i])[[1]]
+  # }
   #affiliations <- activities$affiliation
   education <- activities$educations$`education-summary`
   education <- education[order(education$'end-date.year.value', decreasing=TRUE),]
@@ -138,19 +142,29 @@ CreateEmploymentMarkdown <- function(orcid.info, outdir=tempdir()) {
 CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = "This is all in addition to other **funding my students have gotten** (NSF EAPSI grant, fellowships from NIMBioS and PEER (an NIH-funded program at UTK), Google Summer of Code funding), **funding for workshops or working groups** (from NIMBioS and the Society for Systematic Biologists), and **funding I got before my faculty position** (NESCent postdoctoral fellowship, NSF DDIG, NSF GRF, and various internal grants at UC Davis).") {
 		funding.string <- '\n\n## Funding\n\n'
 		funding.string <- paste(funding.string, additional.te, sep="")
+
+    funding.full <- list()
+    total.funding <- 0
+    for (i in sequence(nrow(funding))) {
+       local.funding <- rorcid::orcid_fundings(id, put_code=orcid.info$funding$`put-code`[i])[[1]]
+       total.funding <- total.funding + as.numeric(local.funding$amount$value)
+       funding.full[[i]] <- local.funding
+     }
+
     funding.string <- paste(funding.string, paste(" Total external funding, so far, as a faculty member is $", prettyNum(sum(as.numeric(orcid.info$funding$amount.value)), big.mark=",", scientific=FALSE), ".", sep=""), sep="")
 
 		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------------------------ | -------- | ------ |', sep="")
   #  orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
-  	for (i in sequence(dim(orcid.info$funding)[1])) {
-			organization <- orcid.info$funding[i,]$organization.name
+  	for (i in sequence(length(funding.full))) {
+
+			organization <- funding.full[[i]]$organization$name
 			if (grepl("National Science Foundation", organization, ignore.case=FALSE)) {
 				organization <- 'NSF'
 			}
 			if (grepl("National Institutes of Health", organization, ignore.case=FALSE)) {
 				organization <- 'NIH'
 			}
-			funding.string <- paste(funding.string, '\n| ', orcid.info$funding[i,]$'start-date.year.value', ' | ', orcid.info$funding[i,]$'funding-title.title.value', ' | ', organization, ' | $', prettyNum(as.numeric(orcid.info$funding[i,]$'amount.value'), big.mark=",", scientific=FALSE), ' |', sep="")
+			funding.string <- paste(funding.string, '\n| ', funding.full[[i]]$`start-date`$year$value, ' | ', funding.full[[i]]$title$title$value, ' | ', organization, ' | $', prettyNum(as.numeric(funding.full[[i]]$amount$value), big.mark=",", scientific=FALSE), ' |', sep="")
 
 
 	#		funding.string <- paste(funding.string, '\n\n', orcid.info$funding[i,]$'funding-title.title.value', " ",	orcid.info$funding[i,]$organization.name, ': ', orcid.info$funding[i,]$'role-title', " (", orcid.info$funding[i,]$'end-date.year.value', "): $", orcid.info$funding[i,]$'amount.value', sep='')
