@@ -35,7 +35,7 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   employment <- activities$employments$`employment-summary`
   employment <- employment[order(employment $'start-date.year.value', decreasing=TRUE),]
 
-  return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment))
+  return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment, id=id))
 
 }
 
@@ -145,8 +145,8 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
 
     funding.full <- list()
     total.funding <- 0
-    for (i in sequence(nrow(funding))) {
-       local.funding <- rorcid::orcid_fundings(id, put_code=orcid.info$funding$`put-code`[i])[[1]]
+    for (i in sequence(nrow(orcid.info$funding))) {
+       local.funding <- rorcid::orcid_fundings(orcid.info$id, put_code=orcid.info$funding$`put-code`[i])[[1]]
        total.funding <- total.funding + as.numeric(local.funding$amount$value)
        funding.full[[i]] <- local.funding
      }
@@ -256,7 +256,7 @@ CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt
 #' @return data.frame with the authors and the papers in the time period
 #' @export
 GetCollaborators <- function(orcid.info, starting.year=2013, outdir=tempdir()) {
-  cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
+  lapply(CleanNames(orcid.info$journals), write,  paste(outdir, "/publications.bib", sep=""), append=TRUE)
 	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
   publications <- publications[which(as.numeric(publications$year)>=starting.year)]
@@ -291,7 +291,7 @@ GetCollaborators <- function(orcid.info, starting.year=2013, outdir=tempdir()) {
 #' @param badges Vector of ImpactStory badge names you want to show (a lot are goofy: could do c('global_reach', 'depsy')).
 #' @export
 CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997", badges=c()) {
-	cat(CleanNames(orcid.info$journals), file=paste(outdir, "/publications.bib", sep=""))
+  lapply(CleanNames(orcid.info$journals), write,  paste(outdir, "/publications.bib", sep=""), append=TRUE)
 	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
   publications.text <- capture.output(print(publications, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
