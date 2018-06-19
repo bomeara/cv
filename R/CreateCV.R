@@ -20,7 +20,7 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   # TO DO: Make sure all entries are bibtex
   #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="JOURNAL_ARTICLE")]
   other.products.raw <- subset(me.pubs, type!="JOURNAL_ARTICLE")
-  other.products.raw <- orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
+  other.products.raw <- rorcid::orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
   other.products <- other.products.raw[[1]]$`work.citation.citation-value`
   activities <- rorcid::orcid_activities(id)[[1]]
   funding <- activities$funding$group
@@ -141,7 +141,7 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
     funding.string <- paste(funding.string, paste(" Total external funding, so far, as a faculty member is $", prettyNum(sum(as.numeric(orcid.info$funding$amount.value)), big.mark=",", scientific=FALSE), ".", sep=""), sep="")
 
 		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------------------------ | -------- | ------ |', sep="")
-    orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
+  #  orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
   	for (i in sequence(dim(orcid.info$funding)[1])) {
 			organization <- orcid.info$funding[i,]$organization.name
 			if (grepl("National Science Foundation", organization, ignore.case=FALSE)) {
