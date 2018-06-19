@@ -20,8 +20,8 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   # TO DO: Make sure all entries are bibtex
   #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="JOURNAL_ARTICLE")]
   other.products.raw <- subset(me.pubs, type!="JOURNAL_ARTICLE")
-  other.products.raw <- orcid_works(id, put_code=other.products.raw$`put-code`)
-  other.products <- other.products.raw$`work.citation.citation-value`
+  other.products.raw <- orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
+  other.products <- other.products.raw[[1]]$`work.citation.citation-value`
   activities <- rorcid::orcid_activities(id)[[1]]
   funding <- activities$funding$group
   #affiliations <- activities$affiliation
@@ -68,7 +68,7 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   results[1,2] <- paste(length(orcid.info$journals)+publications.offset, " journal articles, including ", prominent.pubs, sep="")
 
   results[2,1] <- '**Teaching**'
-  results[2,2] <- "Approximately 4 courses per year on average, ranging from large introductory biology courses to small graduate seminars"
+  results[2,2] <- "Approximately 3 courses per year on average, ranging from large introductory biology courses to small graduate seminars"
 
   results[3,1] <- '**Mentoring**'
   people <- read.delim2(system.file("extdata", "people.txt", package="cv"), stringsAsFactors=FALSE)
@@ -78,7 +78,7 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   results[4,2] <- 'Darwin Day TN advisor, co-organizer of women in science symposium, workshops, and other activities, co-organizer for scientific meetings, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'
 
   results[5,1] <- '**Leadership**'
-  results[5,2] <- 'Associate Head for Dept. of Ecology & Evolutionary Biology, 2016-present; Associate Director for the National Institute for Mathematical and Biological Synthesis, 2016-present; Communications Director for the Society of Systematic Biologists, 2016-present; Society of Systematic Biologists Council, 2012-2014; iEvoBio co-organizer, 2014-2016.'
+  results[5,2] <- 'Associate Head for Dept. of Ecology & Evolutionary Biology, 2016-present; Associate Director for the National Institute for Mathematical and Biological Synthesis, 2016-present; Communications Director for the Society of Systematic Biologists, 2016-2017; Society of Systematic Biologists Council, 2012-2014; iEvoBio co-organizer, 2014-2016.'
 
   results[6,1] <- '**Funding**'
   results[6,2] <- paste("$",round((1e-6)*sum(as.numeric(orcid.info$funding$amount.value)),2), "M in external support, including ", sum(grepl("National Science Foundation", orcid.info$funding$organization.name)), " NSF grants (including a CAREER grant) plus funding from iPlant and Encyclopedia of Life", sep="")
@@ -90,7 +90,7 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep=""))
   i.sources <- i.profile$sources
   results[7,1] <- '**Altmetrics**'
-  results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdos number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
+  results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
 
   cat('\n\n##Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)
   cat(capture.output(knitr::kable(results, row.names=FALSE)), file=paste(outdir, "/summary.md", sep=""), sep='\n', append=TRUE)
@@ -283,7 +283,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
   publications.text <- capture.output(print(publications, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
   publications.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), publications.text)
 
-  cat(CleanNames(orcid.info$books), file=paste(outdir, "/chapters.bib", sep=""))
+  cat(CleanNames(orcid.info$other.products), file=paste(outdir, "/chapters.bib", sep=""))
   chapters <- RefManageR::ReadBib(paste(outdir, "/chapters.bib", sep=""))
   chapters <- sort(chapters, decreasing=TRUE, sorting="ynt")
   chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
