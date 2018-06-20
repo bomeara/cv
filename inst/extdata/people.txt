@@ -9,10 +9,10 @@ Jenn	Bosco	PhD student	Y	N	2012	2017		https://sites.google.com/site/jenniferbosc
 Katie	Massana	PhD student	Y	N	2012	2017		https://sites.google.com/site/kathrynamassana/home
 Orlando	Schwery	PhD student	N	N	2014			https://sites.google.com/site/orlandoschwery/home
 Hugo	Alamillo	Postdoc	Y	N	2011	2012		https://people.northseattle.edu/users/halamillo	Assistant Professor North Seattle College
-Juanjuan (JJ)	Crosskey (formerly Chai)	Postdoc	Y	Y	2011	2013			Member of Comparative Genomics group at Oak Ridge National Lab
+Juanjuan (JJ)	Crosskey (formerly Chai)	Postdoc	Y	Y	2011	2013		https://www.linkedin.com/in/jjcrosskey	Quantitative Analyst at Quantamental Technologies LLC
 Tony	Jhwueng	Postdoc	Y	Y	2009	2011		http://www.tonyjhwueng.info/	"Assistant Professor Feng-Chia U., Taiwan"
 Dominic Evangelista Postdoc N N 2018    EEB https://www.roachbrain.com
-Michelle	Lawing	Postdoc	Y	Y	2012	2014		michelle lawing	Assistant Professor Texas A&M
+Michelle	Lawing	Postdoc	Y	Y	2012	2014		http://people.tamu.edu/~alawing/	Assistant Professor Texas A&M
 Nick	Matzke	Postdoc	Y	Y	2013	2015		http://nickmatzke.weebly.com	DECRA Fellow at The Australian National University in Canberra
 Ryan	Martin	Postdoc	Y	Y	2012	2013		http://www.martinevolutionaryecologylab.com	Assistant Professor Case Western U
 Christian	Yarber	Undergrad	Y	N	2015	2016		https://www.researchgate.net/profile/Christian_Yarber
@@ -49,3 +49,6 @@ Sergei	Tarasov	Postdoc	N	Y	2016			https://sites.google.com/site/starasovresearch
 Jasper	Lee	Committee	Y				Microbiology
 Luna	Sanchez Reyes	Postdoc	N	N	2017		EEB
 David	Bapst	Postdoc	N	N	2017		EEB
+John  Reese Committee N   EEB
+Sam Williams  Committee N   Anthropology
+Liz Agosto  Committee N   Anthropology
