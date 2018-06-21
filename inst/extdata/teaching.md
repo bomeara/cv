@@ -51,6 +51,8 @@ I organize and/or participate in numerous workshops or tutorials.
 
 | Year |       Location        |                             Topic                              |          Role           |
 | ---- | --------------------- | -------------------------------------------------------------- | ----------------------- | --- |
+| 2018 | Friday Harbor, WA         | Evolutionary Quantitative Genetics workshop         | Instructor              |     |
+| 2017 | Friday Harbor, WA         | Evolutionary Quantitative Genetics workshop         | Instructor              |     |
 | 2017 | Baton Rouge, LA       | PHRAPL                                                         | Organizer/instructor    |     |
 | 2016 | Knoxville, TN         | Evolutionary Quantitative Genetics workshop at NIMBioS         | Instructor              |     |
 | 2015 | Ann Arbor, MI         | Comparative methods in R, SSB satellite meeting                | Organizer/instructor    |     |
