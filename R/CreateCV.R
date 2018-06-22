@@ -77,7 +77,7 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
 
   results[3,1] <- '**Mentoring**'
   people <- read.delim2(system.file("extdata", "people.txt", package="cv"), stringsAsFactors=FALSE)
-  results[3,2] <- paste(sum(grepl("PhD student", people$Stage)), " PhD students, ", sum(grepl("Postdoc", people$Stage)), " postdocs, and served on ", sum(grepl("Committee", people$Stage)), " graduate student committees", sep="")
+  results[3,2] <- paste(sum(grepl("PhD student", people$Stage)), " PhD students, ", sum(grepl("Postdoc", people$Stage)), " postdocs, ", sum(grepl("Faculty", people$Stage)), " faculty, ", "and served on ", sum(grepl("Committee", people$Stage)), " graduate student committees", sep="")
 
   results[4,1] <- '**Service/Outreach**'
   results[4,2] <- 'Darwin Day TN advisor, co-organizer of women in science symposium, workshops, and other activities, co-organizer for scientific meetings, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'

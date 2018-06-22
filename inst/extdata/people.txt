@@ -16,7 +16,7 @@ Michelle	Lawing	Postdoc	Y	Y	2012	2014		http://people.tamu.edu/~alawing/	Assistan
 Nick	Matzke	Postdoc	Y	Y	2013	2015		http://nickmatzke.weebly.com	DECRA Fellow at The Australian National University in Canberra
 Ryan	Martin	Postdoc	Y	Y	2012	2013		http://www.martinevolutionaryecologylab.com	Assistant Professor Case Western U
 Christian	Yarber	Undergrad	Y	N	2015	2016		https://www.researchgate.net/profile/Christian_Yarber
-Nicholas	Gladstone	Committee	N	N	2017			https://twitter.com/gladstone_scott
+Nicholas	Gladstone	Committee	N				Geology
 Daniel	Gates	GSOC								"GSoC 2012: Optimizing R code for approximate Bayesian computing. Note that the mentors for this project were Barb Banbury, Derrick Zwickl, and Hilmar Lapp"
 J. Conrad	Stack	GSOC								GSoC 2010: Doing ancestral state estimation in R by porting Brownie
 Paul	McMillan	GSOC								"GSoC 2008: dbgraphnav, a tool to facilitate the browsing of data within relational databases. Developed for TreeTapper."
