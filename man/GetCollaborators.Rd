@@ -14,7 +14,7 @@ GetCollaborators(orcid.info, starting.year = 2013, outdir = tempdir())
 \item{outdir}{The directory to store the temporary markdown file in}
 }
 \value{
-data.frame with the authors and the papers in the time period
+vector of the authors
 }
 \description{
 Get collaborators from past time period
