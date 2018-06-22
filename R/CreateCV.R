@@ -215,7 +215,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     }
   }
 
-  cat('\n\n## Mentoring, Faculty\n\nOur department now has faculty mentored by a committee of later career faculty. I have served on several', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n## Mentoring, Faculty\n\nOur department now has faculty mentored by a committee of later career faculty. I have served on committees for folks hired after me.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
   faculty <- subset(people, Stage=="Faculty")
   faculty <- faculty[order(faculty$Last),]
   faculty.pretty <- faculty[,c("Name", "Department")]
