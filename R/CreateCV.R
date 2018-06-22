@@ -158,7 +158,7 @@ CreateFundingMarkdown <- function(orcid.info, outdir=tempdir(), additional.te = 
        funding.full[[i]] <- local.funding
      }
 
-    funding.string <- paste(funding.string, paste(" Total external funding, so far, as a faculty member is $", prettyNum(sum(as.numeric(orcid.info$funding$amount.value)), big.mark=",", scientific=FALSE), ".", sep=""), sep="")
+    funding.string <- paste(funding.string, paste(" Total external funding, so far, as a faculty member is $", prettyNum(total.funding, big.mark=",", scientific=FALSE), ".", sep=""), sep="")
 
 		funding.string <- paste(funding.string, '\n\n| Year | Title | Funder | Amount |\n| ---- | ------------------------------ | -------- | ------ |', sep="")
   #  orcid.info$funding <- orcid.info$funding[order(orcid.info$funding$'start-date.year.value', decreasing=TRUE),]
@@ -221,7 +221,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   faculty.pretty <- faculty[,c("Name", "Department")]
   cat(capture.output(knitr::kable(faculty.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
-  cat('\n\n## Mentoring, Postdocs\n\nI have mentored numerous postdocs off of my own grants and/or as one of their chosen NIMBioS mentors. Note that NIMBioS postdocs pursue independent research projects but choose one faculty member to mentor them in math and another to mentor them in biology (I have served in both roles).', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n## Mentoring, Postdocs\n\nI have mentored numerous postdocs off of my own grants and/or as one of their chosen NIMBioS mentors. Note that NIMBioS postdocs pursue independent research projects but choose one faculty member to mentor them in math and another to mentor them in biology (I have served in both roles).', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   postdocs <- subset(people, Stage=="Postdoc")
   postdocs <- postdocs[order(postdocs$Last),]
   postdocs.pretty <- postdocs[,c("Name", "Duration", "NIMBioS", "CurrentPosition")]
@@ -321,7 +321,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
     g.profile <- NULL
     try(g.profile <- scholar::get_profile(scholar.id))
     if(!is.null(g.profile)) {
-      cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however).", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+      cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however). Also note that I work under a very stringent criterion for when I get authorship -- I have to actively make a significant contribution to the research and writing to merit authorship. For example, in 2015-6, three lab members had papers in *Science* ([grad student Sam Borstein](http://science.sciencemag.org/content/350/6264/1077.long), [postdoc Nick Matzke](http://science.sciencemag.org/content/351/6268/28), and [postdoc Sandy Kawano](http://science.sciencemag.org/content/353/6295/154.full)) but I am, appropriately to my mind, not an author on any of these.", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
     }
   }
 
@@ -352,11 +352,12 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
 #' Compile a set of markdown documents and convert with pandoc
 #' @param input Vector of markdown documents
 #' @param outdir The directory to store the output in
-#' @param output The output base file name. You'll receive <output>.pdf and <output>.html files.
 #' @param css The css file with formatting info.
+#' @param output The output base file name. You'll receive <output>.pdf and <output>.html files.
+#' @param open.files If TRUE, open the output files
 #' @export
 #FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "presentations.md"), output="OMearaCV.pdf") {
-FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "summary.md", "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv"), "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV") {
+FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "summary.md", "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv"), "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV", open.files=TRUE) {
   original.wd <- getwd()
   setwd(outdir)
   system(paste("pandoc --css ", css, " -o ", output, ".html ", paste(input, collapse=" "), sep=""))
@@ -366,6 +367,13 @@ FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="
   #system(paste("pandoc --css ", css, " -o ", output, "_pandoc.pdf ", paste(input, collapse=" "), sep=""))
   system(paste("pandoc --css ", css, " -o ", output, ".md ", paste(input, collapse=" "), sep=""))
   system(paste("pandoc --css ", css, " -o ", output, ".docx ", paste(input, collapse=" "), sep=""))
+  print(paste("MS Word file ", output, ".docx has been created in ", outdir, sep=""))
   #system(paste("pandoc -o ", output, "_fromword.pdf ", paste0(output, ".docx"), sep=""))
+  if(open.files) {
+    system(paste0("open ", output, ".docx"))
+    system(paste0("open ", output, ".pdf"))
+    system(paste0("open ", output, ".html"))
+    system(paste0("open ."))
+  }
   setwd(original.wd)
 }
