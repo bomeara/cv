@@ -43,12 +43,16 @@ Marisol	Sanchez-Garcia	Committee	Y				EEB
 Jess	Welch	Committee	Y				EEB
 Rachel	Wooliver	Committee	Y				EEB
 Sarah	Sheffield	Committee	Y				Geology
+Sara Lipshutz Committee Y				EEB
 Jen	Bauer	Committee	Y				Geology
 Ryan	Rooney	Committee	N				Geology
 Sergei	Tarasov	Postdoc	N	Y	2016			https://sites.google.com/site/starasovresearch/	NIMBioS postdoc
 Jasper	Lee	Committee	Y				Microbiology
 Luna	Sanchez Reyes	Postdoc	N	N	2017		EEB
 David	Bapst	Postdoc	N	N	2017		EEB
-John  Reese Committee N   EEB
-Sam Williams  Committee N   Anthropology
-Liz Agosto  Committee N   Anthropology
+John	Reese Committee N   EEB
+Sam	Williams  Committee N   Anthropology
+Liz	Agosto  Committee N   Anthropology
+Liz	Derryberry	Faculty	N	N	2017		EEB
+Kimberly	Sheldon	Faculty	N	N	2017		EEB
+Stephanie	Kivlin	Faculty	N	N	2018		EEB

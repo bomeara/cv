@@ -24,6 +24,7 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   other.products <- other.products.raw[[1]]$`work.citation.citation-value`
   activities <- rorcid::orcid_activities(id)[[1]]
   funding <- plyr::rbind.fill(activities$funding$group$`funding-summary`)
+  funding <- funding[order(funding$`start-date.year.value`, decreasing = TRUE),]
   # funding.full <- data.frame()
   # for (i in sequence(nrow(funding))) {
   #   local.funding <- rorcid::orcid_fundings(id, put_code=funding$`put-code`[i])[[1]]
@@ -82,10 +83,15 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   results[4,2] <- 'Darwin Day TN advisor, co-organizer of women in science symposium, workshops, and other activities, co-organizer for scientific meetings, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'
 
   results[5,1] <- '**Leadership**'
-  results[5,2] <- 'Associate Head for Dept. of Ecology & Evolutionary Biology, 2016-present; Associate Director for the National Institute for Mathematical and Biological Synthesis, 2016-present; Communications Director for the Society of Systematic Biologists, 2016-2017; Society of Systematic Biologists Council, 2012-2014; iEvoBio co-organizer, 2014-2016.'
+  results[5,2] <- 'Associate Head for Dept. of Ecology & Evolutionary Biology, 2016-present; Associate Director for the National Institute for Mathematical and Biological Synthesis, 2016-present; Code of Conduct Committee for SSE/SSB/ASN, 2018-present; Communications Director for the Society of Systematic Biologists, 2016-2017; Society of Systematic Biologists Council, 2012-2014; iEvoBio co-organizer, 2014-2016.'
 
   results[6,1] <- '**Funding**'
-  results[6,2] <- paste("$",round((1e-6)*sum(as.numeric(orcid.info$funding$amount.value)),2), "M in external support, including ", sum(grepl("National Science Foundation", orcid.info$funding$organization.name)), " NSF grants (including a CAREER grant) plus funding from iPlant and Encyclopedia of Life", sep="")
+  total.funding <- 0
+  for (i in sequence(nrow(orcid.info$funding))) {
+     local.funding <- rorcid::orcid_fundings(orcid.info$id, put_code=orcid.info$funding$`put-code`[i])[[1]]
+     total.funding <- total.funding + as.numeric(local.funding$amount$value)
+   }
+  results[6,2] <- paste("$",round((1e-6)*total.funding,2), "M in external support, including ", sum(grepl("National Science Foundation", orcid.info$funding$organization.name)), " NSF grants (including a CAREER grant) plus funding from iPlant and Encyclopedia of Life", sep="")
 
   scholar.id="vpjEkQwAAAAJ"
   impact.story.id = "0000-0002-0337-5997"
@@ -94,9 +100,10 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep=""))
   i.sources <- i.profile$sources
   results[7,1] <- '**Altmetrics**'
-  results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
+  #results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
+  results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
 
-  cat('\n\n##Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n## Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)
   cat(capture.output(knitr::kable(results, row.names=FALSE)), file=paste(outdir, "/summary.md", sep=""), sep='\n', append=TRUE)
 
 }
@@ -208,28 +215,34 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     }
   }
 
-  cat('\n\n##Mentoring, Postdocs\n\nI have mentored numerous postdocs off of my own grants and/or as one of their chosen NIMBioS mentors. Note that NIMBioS postdocs pursue independent research projects but choose one faculty member to mentor them in math and another to mentor them in biology (I have served in both roles).', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n## Mentoring, Faculty\n\nOur department now has faculty mentored by a committee of later career faculty. I have served on several', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
+  faculty <- subset(people, Stage=="Faculty")
+  faculty <- faculty[order(faculty$Last),]
+  faculty.pretty <- faculty[,c("Name", "Department")]
+  cat(capture.output(knitr::kable(faculty.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+
+  cat('\n\n## Mentoring, Postdocs\n\nI have mentored numerous postdocs off of my own grants and/or as one of their chosen NIMBioS mentors. Note that NIMBioS postdocs pursue independent research projects but choose one faculty member to mentor them in math and another to mentor them in biology (I have served in both roles).', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
   postdocs <- subset(people, Stage=="Postdoc")
   postdocs <- postdocs[order(postdocs$Last),]
   postdocs.pretty <- postdocs[,c("Name", "Duration", "NIMBioS", "CurrentPosition")]
   names(postdocs.pretty)[4] <- "Current Position"
   cat(capture.output(knitr::kable(postdocs.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
-  cat('\n\n##Mentoring, Grad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat('\n\n## Mentoring, Grad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   grads <- subset(people, Stage=="PhD student")
   grads <- grads[order(grads$Last),]
   grads.pretty <- grads[,c("Name","Stage", "Duration", "Note")]
   names(grads.pretty)[3] <- "Time in Lab"
   cat(capture.output(knitr::kable(grads.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
-  cat('\n\n##Mentoring, Undergrad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat('\n\n## Mentoring, Undergrad students in my lab\n\n ', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   undergrads <- subset(people, Stage=="Undergrad")
   undergrads <- undergrads[order(undergrads $Last),]
   undergrads.pretty <- undergrads[,c("Name","Stage", "Duration", "Note")]
   names(undergrads.pretty)[3] <- "Time in Lab"
   cat(capture.output(knitr::kable(undergrads.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
-  cat('\n\n##Mentoring, Grad student committees\n\nIn addition to my own students, of course.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+  cat('\n\n## Mentoring, Grad student committees\n\nIn addition to my own students, of course.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
   com <- subset(people, Stage=="Committee")
   com <- com[order(com$Last),]
   com.pretty <- com[,c("Name","Department")]
@@ -243,7 +256,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 #' @param outdir The directory to store the markdown file in
 CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt", package="cv"), outdir=tempdir()) {
   service <- read.delim2(infile, stringsAsFactors=FALSE)
-  cat('\n\n##Service\n\n', file=paste(outdir, "/service.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n## Service\n\n', file=paste(outdir, "/service.md", sep=""), sep='\n', append=FALSE)
   service$Service <- paste("*", service$Service)
   cat(service$Service, file=paste(outdir, "/service.md", sep=""), sep='\n', append=TRUE)
 }
@@ -303,7 +316,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
   chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
   chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
 
-  cat('\n\n##Publications: Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+  cat('\n\n## Publications: Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
   if(!is.null(scholar.id)) {
     g.profile <- NULL
     try(g.profile <- scholar::get_profile(scholar.id))
@@ -331,7 +344,7 @@ CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.na
   #cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
   cat('\n\n', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
   cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-  cat('\n\n##Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
+  cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
   cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 }
 
