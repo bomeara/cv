@@ -1,6 +1,6 @@
 
 
-##Presentations
+## Presentations
 
 **Bold** indicates presentation was delivered by me; otherwise, I was a coauthor. Also see various workshops under teaching.
 
@@ -14,9 +14,15 @@ June 2017: Poster on inference of amino acid functionality from DNA sequences us
 
 **September 2016**: Symposium talk on Approximate Bayesian computation for trait evolution on phylogenies at Geological Society of America annual meeting.
 
-August 2016: Talk on linking leaf spectra to phylogenies at Ecological Society of America 2016 annual meeting. Jose Eduardo Meireles, Brian O’Meara, Anna Schweiger, Aditya Singh, Phil Townsend, Susan Ustin, Michael Schaepman, Franziska Schrodt, John Gamon and Jeannine Cavender-Bares.
+August 2016: Talk on linking leaf spectra to phylogenies at Ecological Society of America 2016 annual meeting. Jose Eduardo Meireles, Brian O’Meara, Anna Schweiger, Aditya Singh, Phil Townsend, Susan Ustin, Michael Schaepman, Franziska Schrodt, John Gamon, and Jeannine Cavender-Bares.
+
+July 2016: Talk on Moving beyond black box, GTR models in phyogenetic analyses through the use of mechanistic models of sequence evolution at the Genetics Society of America: The Allied Genetics Conference in Orlando, FL. Mike Gilchrist, Russ Zaretzki, Cedric Landerer, Jeremy Beaulieu, and Brian O'Meara
+
+November 2015: Talk on Improving Phylogenetics via Population Genetics at the Society for the Study of Molecular Evolution Satellite Meeting on Mechanisms of Protein Evolution in Denver, CO. Mike Gilchrist, Jeremy Beaulieu, JJ Chai, and Brian O'Meara.
 
 **September 2015**: Talk on heterogeneity at Texas A&M
+
+July 2015: Talk on Moving beyond black box, GTR models in phyogenetic analyses through the use of mechanistic models of sequence evolution at the Annual Meeting of the Society for Molecular Biology & Evolution in Vienna, Austria. Mike Gilchrist, Jeremy Beaulieu, and Brian O'Meara
 
 **June 2014**: Talk on floral evolution at Evolution 2014 meeting; co-lead author was Stacey Smith, coauthors were W SArmbruster, L Harder, C Hardy, L Hileman, L Hufford, A Litt, S Magallon, S Smith, P Stevens, C Fenster, P Diggle.
 
