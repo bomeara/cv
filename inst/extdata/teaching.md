@@ -8,6 +8,7 @@ I created a course on macroevolution targeted at upper level undergraduate and g
 
 | Year | Semester | Course Number | Topic                           | Enrollment                     | Percent Effort |     |
 | ---- | -------- | ------------- | ------------------------------- | ------------------------------ | -------------- | --- |
+| 2018 | Fall     | EEB464        | Macroevolution                  | 14                             | 100            |     |
 | 2018 | Spring   | EEB603        | PhyloMeth                       | 2                              | 100            |     |
 | 2018 | Spring   | EEB504        | PhyloMeth                       | 5                              | 100            |     |
 | 2017 | Fall     | EEB464        | Macroevolution                  | 23                             | 100            |     |
