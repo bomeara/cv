@@ -57,3 +57,4 @@ Liz	Derryberry	Faculty	N	N	2017		EEB
 Kimberly	Sheldon	Faculty	N	N	2017		EEB
 Stephanie	Kivlin	Faculty	N	N	2018		EEB
 Jodie	Wiggins	Postdoc	N	N	2018		EEB   http://jodiewiggins.wixsite.com/mysite
+Zach Tharpe	Undergrad	Y	N	2019
