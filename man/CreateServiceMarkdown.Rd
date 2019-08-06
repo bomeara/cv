@@ -4,8 +4,8 @@
 \alias{CreateServiceMarkdown}
 \title{Create a Markdown document of service from biographical info}
 \usage{
-CreateServiceMarkdown(infile = system.file("extdata", "service.txt", package =
-  "cv"), outdir = tempdir())
+CreateServiceMarkdown(infile = system.file("extdata", "service.txt",
+  package = "cv"), outdir = tempdir())
 }
 \arguments{
 \item{infile}{The path to the text delimited file}

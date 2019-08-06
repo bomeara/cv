@@ -4,8 +4,8 @@
 \alias{CreatePeopleMarkdown}
 \title{Create a Markdown document of people in the lab from biographical info}
 \usage{
-CreatePeopleMarkdown(infile = system.file("extdata", "people.txt", package =
-  "cv"), outdir = tempdir())
+CreatePeopleMarkdown(infile = system.file("extdata", "people.txt",
+  package = "cv"), outdir = tempdir())
 }
 \arguments{
 \item{infile}{The path to the text delimited file}

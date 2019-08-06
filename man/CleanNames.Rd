@@ -7,7 +7,7 @@
 CleanNames(citations)
 }
 \arguments{
-\item{citations}{Bibtext formatted, presumably orcid.info$journals}
+\item{citations}{Bibtext formatted}
 }
 \value{
 Same object, but with curly quotes and similar evil symbols fixed
