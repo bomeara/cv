@@ -6,7 +6,7 @@
 GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   me <- rorcid::orcid_id(id)
   me.pubs <- rorcid::works(me)
-  journal.info <- subset(me.pubs, type=="JOURNAL_ARTICLE")
+  journal.info <- subset(me.pubs, type=="journal-article")
   journal.dois <- c()
   for (i in sequence(nrow(journal.info))) {
     info.df <- journal.info$`external-ids.external-id`[[i]]
@@ -18,8 +18,8 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   #my.dois <- rorcid::identifiers(rorcid::works(me))
   journals <- rcrossref::cr_cn(dois = journal.dois, format = "bibtex", .progress="text")
   # TO DO: Make sure all entries are bibtex
-  #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="JOURNAL_ARTICLE")]
-  other.products.raw <- subset(me.pubs, type!="JOURNAL_ARTICLE")
+  #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="journal-article")]
+  other.products.raw <- subset(me.pubs, type!="journal-article")
   other.products.raw <- rorcid::orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
   other.products <- other.products.raw[[1]]$`work.citation.citation-value`
   activities <- rorcid::orcid_activities(id)[[1]]
@@ -100,7 +100,7 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep=""))
   i.sources <- i.profile$sources
   results[7,1] <- '**Altmetrics**'
-  #results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
+  # results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
   results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
 
   cat('\n\n## Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)

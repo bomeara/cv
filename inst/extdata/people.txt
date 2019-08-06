@@ -4,7 +4,7 @@ Jeremy	Beaulieu	Postdoc	Y	Both	2012	2016		http://www.jeremybeaulieu.org/	Assista
 Nathan	Jackson	Postdoc	Y	N	2013	2016		http://nathandjackson.com/	Researcher at National Jewish Health
 Sandy	Kawano	Postdoc	Y	Y	2014	2016		http://sandykawano.weebly.com/	Starting as Assistant Professor at  CSU Long Beach in Aug. 2017
 Megan	Rua	Postdoc	Y	Y	2015	2016		https://meganrua.wordpress.com	Assistant Professor Wright State U
-Sam	Borstein	PhD student	N	N	2014			https://fish4thought.wordpress.com/
+Sam	Borstein	PhD student	Y	N	2014	2019		https://fish4thought.wordpress.com/
 Jenn	Bosco	PhD student	Y	N	2012	2017		https://sites.google.com/site/jenniferboscoinfo/home		Co-advised with Susan Riechert
 Katie	Massana	PhD student	Y	N	2012	2017		https://sites.google.com/site/kathrynamassana/home
 Orlando	Schwery	PhD student	N	N	2014			https://sites.google.com/site/orlandoschwery/home
@@ -26,17 +26,17 @@ Troy	Fadiga	Committee	Y				Geology
 Mauricio	Gonzalez-Forero	Committee	Y				EEB
 Phillip	Hollingsworth	Committee	Y				EEB
 Will	Howell	Committee	Y				EEB
-Bryan	Looney	Committee	N				EEB
+Bryan	Looney	Committee	Y				EEB
 Ivan	Juric	Committee	Y				EEB
 Max	Rupp	Committee	Y				EEB
 Geetha	Saarunya S	Committee	Y				GST
 Leonidas	Salichos	Committee	Y				Vanderbilt
 Jordan	Utley	Committee	Y				GST
-Aaron	Floden	Committee	N				EEB
+Aaron	Floden	Committee	Y				EEB
 Alannie-Grace	Grant	Committee	N				EEB
 Whitaker	Hoskins	Committee	Y				EEB
-Cedric	Landerer	Committee	N				EEB
-Liam	Mueller	Committee	N				EEB
+Cedric	Landerer	Committee	Y				EEB
+Liam	Mueller	Committee	Y				EEB
 Tyson	Paulson	Committee	N				EEB
 Todd	Pierson	Committee	N				EEB
 Marisol	Sanchez-Garcia	Committee	Y				EEB
@@ -48,13 +48,13 @@ Jen	Bauer	Committee	Y				Geology
 Ryan	Rooney	Committee	N				Geology
 Sergei	Tarasov	Postdoc	N	Y	2016	2018		https://sites.google.com/site/starasovresearch/	NIMBioS postdoc
 Jasper	Lee	Committee	Y				Microbiology
-Luna	Sanchez Reyes	Postdoc	N	N	2017		EEB
+Luna	Sanchez Reyes	Postdoc	Y	N	2017	2019	EEB
 David	Bapst	Postdoc	N	N	2017		EEB
 John	Reese Committee N   EEB
-Sam	Williams  Committee N   Anthropology
-Liz	Agosto  Committee N   Anthropology
+Sam	Williams  Committee Y   Anthropology
+Liz	Agosto  Committee Y   Anthropology
 Liz	Derryberry	Faculty	N	N	2017		EEB
 Kimberly	Sheldon	Faculty	N	N	2017		EEB
 Stephanie	Kivlin	Faculty	N	N	2018		EEB
-Jodie	Wiggins	Postdoc	N	N	2018		EEB   http://jodiewiggins.wixsite.com/mysite
+Jodie	Wiggins	Postdoc	Y	N	2018	2019	EEB   http://jodiewiggins.wixsite.com/mysite
 Zach Tharpe	Undergrad	Y	N	2019
