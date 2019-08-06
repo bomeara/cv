@@ -6,22 +6,26 @@
 GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   me <- rorcid::orcid_id(id)
   me.pubs <- rorcid::works(me)
-  journal.info <- subset(me.pubs, type=="journal-article")
-  journal.dois <- c()
-  for (i in sequence(nrow(journal.info))) {
-    info.df <- journal.info$`external-ids.external-id`[[i]]
-    info.df <- subset(info.df, `external-id-type`=="doi")
-    if(nrow(info.df)>=1) {
-      journal.dois <- append(journal.dois, info.df$`external-id-value`[1])
-    }
-  }
+  #journal.info <- subset(me.pubs, type=="journal-article")
+  #journal.dois <- c()
+  # for (i in sequence(nrow(journal.info))) {
+  #   info.df <- journal.info$`external-ids.external-id`[[i]]
+  #   info.df <- subset(info.df, `external-id-type`=="doi")
+  #   if(nrow(info.df)>=1) {
+  #     journal.dois <- append(journal.dois, info.df$`external-id-value`[1])
+  #   }
+  # }
   #my.dois <- rorcid::identifiers(rorcid::works(me))
-  journals <- rcrossref::cr_cn(dois = journal.dois, format = "bibtex", .progress="text")
+  #journals <- rcrossref::cr_cn(dois = journal.dois, format = "bibtex", .progress="text")
   # TO DO: Make sure all entries are bibtex
   #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="journal-article")]
-  other.products.raw <- subset(me.pubs, type!="journal-article")
-  other.products.raw <- rorcid::orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
-  other.products <- other.products.raw[[1]]$`work.citation.citation-value`
+	publications <- rorcid::orcid_works(id, format="application/json")[[1]][[1]]
+	publications <- publications[order(publications$`publication-date.month.value`),]
+	publications <- publications[!duplicated(tolower(publications$title.title.value)),]
+	journals <- subset(publications, type!="journal-article")
+  other.products <- subset(publications, type!="journal-article")
+  #other.products.raw <- rorcid::orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
+  #other.products <- other.products.raw[[1]]$`work.citation.citation-value`
   activities <- rorcid::orcid_activities(id)[[1]]
   funding <- plyr::rbind.fill(activities$funding$group$`funding-summary`)
   funding <- funding[order(funding$`start-date.year.value`, decreasing = TRUE),]
@@ -30,11 +34,24 @@ GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
   #   local.funding <- rorcid::orcid_fundings(id, put_code=funding$`put-code`[i])[[1]]
   # }
   #affiliations <- activities$affiliation
-  education <- activities$educations$`education-summary`
+	educations <- rorcid::orcid_educations(id)[[1]]$`affiliation-group`
+	education <- as.data.frame(matrix(unlist(educations$summaries), nrow=length(educations$summaries), byrow=TRUE))
+	colnames(education) <- gsub("education-summary.", "", names(educations$summaries[[1]]))
+  #education <- activities$educations$`education-summary`
   education <- education[order(education$'end-date.year.value', decreasing=TRUE),]
 
-  employment <- activities$employments$`employment-summary`
-  employment <- employment[order(employment $'start-date.year.value', decreasing=TRUE),]
+	employments <- rorcid::orcid_employments(id)[[1]]$`affiliation-group`
+
+	employment <- data.frame()
+	for (i in sequence(length(employments$summaries))) {
+		employment <- plyr::rbind.fill(employment, as.data.frame(employments$summaries[[i]], stringsAsFactors=FALSE))
+	}
+	colnames(employment) <- gsub("employment-summary.", "", colnames(employment))
+  employment <- employment[order(employment$'start-date.year.value', decreasing=TRUE),]
+
+
+  #employment <- activities$employments$`employment-summary`
+#  employment <- employment[order(employment $'start-date.year.value', decreasing=TRUE),]
 
   return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment, id=id))
 
@@ -99,9 +116,9 @@ CreateSummaryMarkdown <- function(orcid.info, outdir=tempdir(), publications.off
   github.user <- jsonlite::fromJSON(txt="https://api.github.com/users/bomeara")
   i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep=""))
   i.sources <- i.profile$sources
-  results[7,1] <- '**Altmetrics**'
-  # results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been saved ", subset(i.sources, source_name=="mendeley")$posts_count, " times in reference manager Mendeley, have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
-  results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
+  #results[7,1] <- '**Altmetrics**'
+
+  #results[7,2] <- paste("Number of citations = ", g.profile$total_cites, "; h-index = ", g.profile$h_index, "; ", github.user$public_repos, " public github repos; Erdős number = 4; papers have been tweeted about ", subset(i.sources, source_name=="twitter")$posts_count, " times, and have been mentioned ", subset(i.sources, source_name=="news")$posts_count, " times in the news", sep="")
 
   cat('\n\n## Summary\n\n ', file=paste(outdir, "/summary.md", sep=""), sep='\n', append=FALSE)
   cat(capture.output(knitr::kable(results, row.names=FALSE)), file=paste(outdir, "/summary.md", sep=""), sep='\n', append=TRUE)
