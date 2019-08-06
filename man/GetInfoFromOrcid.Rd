@@ -4,10 +4,15 @@
 \alias{GetInfoFromOrcid}
 \title{Pull in info from ORCID}
 \usage{
-GetInfoFromOrcid(id = "0000-0002-0337-5997")
+GetInfoFromOrcid(id = "0000-0002-0337-5997",
+  scholar_id = "vpjEkQwAAAAJ", package_author_name = "Meara")
 }
 \arguments{
 \item{id}{Your ORCID id}
+
+\item{scholar_id}{Your Google Scholar id}
+
+\item{package_author_name}{A string to search for your packages on CRAN}
 }
 \value{
 A list of info from ORCID

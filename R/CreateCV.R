@@ -220,9 +220,11 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 
   #' Pull in info from ORCID
   #' @param id Your ORCID id
+  #' @param scholar_id Your Google Scholar id
+  #' @param package_author_name A string to search for your packages on CRAN
   #' @return A list of info from ORCID
   #' @export
-  GetInfoFromOrcid <- function(id="0000-0002-0337-5997") {
+  GetInfoFromOrcid <- function(id="0000-0002-0337-5997", scholar_id = "vpjEkQwAAAAJ", package_author_name = "Meara") {
     me <- rorcid::orcid_id(id)
     me.pubs <- rorcid::works(me)
     #journal.info <- subset(me.pubs, type=="journal-article")
@@ -238,10 +240,56 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     #journals <- rcrossref::cr_cn(dois = journal.dois, format = "bibtex", .progress="text")
     # TO DO: Make sure all entries are bibtex
     #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="journal-article")]
+
+    citations <- rorcid::orcid_citations(id)$citation
+
+    cat(citations, file=file.path(tempdir(), "me.bib"), sep="\n\n")
+
+    bibs <- as.data.frame(bib2df::bib2df(file.path(tempdir(), "me.bib")), stringsAsFactors=FALSE)
+    bibs <- bibs[!duplicated(bibs$DOI),]
+
+    scholar <- scholar::get_publications(scholar_id)
   	publications <- rorcid::orcid_works(id, format="application/json")[[1]][[1]]
   	publications <- publications[order(publications$`publication-date.month.value`),]
   	publications <- publications[!duplicated(tolower(publications$title.title.value)),]
-  	journals <- subset(publications, type!="journal-article")
+    publications$doi <- NA
+    for (i in sequence(nrow(publications))) {
+     # print(i)
+     # print(publications$title.title.value[i])
+      best.match <- agrep(publications$title.title.value[i],bibs$TITLE)
+      if(length(best.match)>1) {
+        best.match <- which.min(adist(publications$title.title.value[i],bibs$TITLE))
+      }
+      if(length(best.match)==1) {
+        publications$doi[i] <- bibs$DOI[best.match]
+      }
+    }
+
+    publications$scholar_citations <- NA
+    for (i in sequence(nrow(publications))) {
+     # print(i)
+     # print(publications$title.title.value[i])
+      best.match <- agrep(tolower(publications$title.title.value[i]),tolower(scholar$title))
+      if(length(best.match)>1) {
+        best.match <- which.min(adist(tolower(publications$title.title.value[i]),tolower(scholar$title)))
+      }
+      #print(scholar$title[best.match])
+      #print(paste0("Cites ", scholar$cites[best.match]))
+
+      if(length(best.match)==1) {
+        publications$scholar_citations[i] <- scholar$cites[best.match]
+      }
+    }
+
+    packages <- as.data.frame(packagefinder::exploreFields(package_author_name, c("Maintainer", "Authors@R", "Author"), "or", "like"))
+
+    total_dl <- function(x) {
+      return(sum(cranlogs::cran_downloads(packages=x,from="2005-01-01")$count))
+    }
+    packages$downloads <- sapply(packages$NAME, total_dl)
+
+
+  	journals <- subset(publications, type=="journal-article")
     other.products <- subset(publications, type!="journal-article")
     #other.products.raw <- rorcid::orcid_works(id, put_code=other.products.raw$`put-code`)[[1]]
     #other.products <- other.products.raw[[1]]$`work.citation.citation-value`
@@ -269,10 +317,26 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     employment <- employment[order(employment$'start-date.year.value', decreasing=TRUE),]
 
 
+    current.year <- as.numeric(format(Sys.Date(), "%Y"))
+    citation.year <- current.year - 1
+    paper.years <- c(citation.year-1, citation.year-2)
+    scholar_previous2 <- scholar[which(scholar$year %in% paper.years),]
+    scholar_previous2$number <- as.character(scholar_previous2$number)
+    scholar_previous2$journal <- as.character(scholar_previous2$journal)
+    scholar_previous2 <- scholar_previous2[which(nchar(scholar_previous2$journal)>0),]
+    scholar_previous2 <- scholar_previous2[which(nchar(scholar_previous2$number)>0),]
+    impact.citations <- 0
+    for (i in sequence(nrow(scholar_previous2))) {
+      ach <- get_article_cite_history(scholar_id, scholar_previous2$pubid[i])
+      impact.citations <- sum(impact.citations, ach$cites[which(ach$year==citation.year)], na.rm=TRUE)
+    }
+    impact.factor <- impact.citations / nrow(scholar_previous2)
+
+
     #employment <- activities$employments$`employment-summary`
   #  employment <- employment[order(employment $'start-date.year.value', decreasing=TRUE),]
 
-    return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment, id=id))
+    return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment, id=id, packages=packages, impact.factor=impact.factor))
 
   }
 
