@@ -5,13 +5,13 @@
 #' @return Same object, but with curly quotes and similar evil symbols fixed
 #' @export
 CleanNames <- function(citations) {
-	for (i in sequence(length(citations))) {
-    citations[i] <- gsub("meara", "Meara", citations[i])
-		citations[i] <- gsub("\\{'\\}", "'", citations[i])
-		citations[i] <- gsub("\\{\\\\textquotesingle\\}", "'", citations[i])
-		citations[i] <- gsub("O\\?Meara", "O'Meara", citations[i])
-		citations[i] <- gsub("\\{\\\\\\^\\a\\}\\?\\?", "'", citations[i])
-	}
+	# for (i in sequence(length(citations))) {
+  #   citations[i] <- gsub("meara", "Meara", citations[i])
+	# 	citations[i] <- gsub("\\{'\\}", "'", citations[i])
+	# 	citations[i] <- gsub("\\{\\\\textquotesingle\\}", "'", citations[i])
+	# 	citations[i] <- gsub("O\\?Meara", "O'Meara", citations[i])
+	# 	citations[i] <- gsub("\\{\\\\\\^\\a\\}\\?\\?", "'", citations[i])
+	# }
 	return(citations)
 }
 
@@ -20,6 +20,7 @@ CleanNames <- function(citations) {
 #' Create a Markdown document of people in the lab from biographical info
 #' @param infile The path to the text delimited file
 #' @param outdir The directory to store the markdown file in
+#' @export
 CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt", package="cv"), outdir=tempdir()) {
   people <- read.delim2(infile, stringsAsFactors=FALSE)
   people$Stop <- as.character(people$Stop)
@@ -71,6 +72,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   #' Create a Markdown document of service from biographical info
   #' @param infile The path to the text delimited file
   #' @param outdir The directory to store the markdown file in
+  #' @export
   CreateServiceMarkdown <- function(infile =   system.file("extdata", "service.txt", package="cv"), outdir=tempdir()) {
     service <- read.delim2(infile, stringsAsFactors=FALSE)
     cat('\n\n## Service\n\n', file=paste(outdir, "/service.md", sep=""), sep='\n', append=FALSE)
@@ -252,16 +254,20 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   	publications <- rorcid::orcid_works(id, format="application/json")[[1]][[1]]
   	publications <- publications[order(publications$`publication-date.month.value`),]
   	publications <- publications[!duplicated(tolower(publications$title.title.value)),]
-    publications$doi <- NA
+    publications$doi <- ""
     for (i in sequence(nrow(publications))) {
+      ref.info <- orcid.info$journals$`external-ids.external-id`[[i]]
+      publications$doi[i] <- ref.info$`external-id-value`[which(ref.info$`external-id-type`=="doi")]
      # print(i)
      # print(publications$title.title.value[i])
-      best.match <- agrep(publications$title.title.value[i],bibs$TITLE)
-      if(length(best.match)>1) {
-        best.match <- which.min(adist(publications$title.title.value[i],bibs$TITLE))
-      }
-      if(length(best.match)==1) {
-        publications$doi[i] <- bibs$DOI[best.match]
+      if(nchar(publications$doi[i])==0) {
+        best.match <- agrep(publications$title.title.value[i],bibs$TITLE)
+        if(length(best.match)>1) {
+          best.match <- which.min(adist(publications$title.title.value[i],bibs$TITLE))
+        }
+        if(length(best.match)==1) {
+          publications$doi[i] <- bibs$DOI[best.match]
+        }
       }
     }
 
