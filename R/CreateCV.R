@@ -227,8 +227,8 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   #' @return A list of info from ORCID
   #' @export
   GetInfoFromOrcid <- function(id="0000-0002-0337-5997", scholar_id = "vpjEkQwAAAAJ", package_author_name = "Meara") {
-    me <- rorcid::orcid_id(id)
-    me.pubs <- rorcid::works(me)
+    #me <- rorcid::orcid_id(id)
+    #me.pubs <- rorcid::works(me)
     #journal.info <- subset(me.pubs, type=="journal-article")
     #journal.dois <- c()
     # for (i in sequence(nrow(journal.info))) {
@@ -256,11 +256,10 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   	publications <- publications[!duplicated(tolower(publications$title.title.value)),]
     publications$doi <- ""
     for (i in sequence(nrow(publications))) {
-      ref.info <- orcid.info$journals$`external-ids.external-id`[[i]]
-      publications$doi[i] <- ref.info$`external-id-value`[which(ref.info$`external-id-type`=="doi")]
-     # print(i)
-     # print(publications$title.title.value[i])
-      if(nchar(publications$doi[i])==0) {
+      ref.info <- publications$`external-ids.external-id`[[i]]
+      if(length(ref.info$`external-id-value`[which(ref.info$`external-id-type`=="doi")])>0) {
+        publications$doi[i] <- ref.info$`external-id-value`[which(ref.info$`external-id-type`=="doi")]
+      } else {
         best.match <- agrep(publications$title.title.value[i],bibs$TITLE)
         if(length(best.match)>1) {
           best.match <- which.min(adist(publications$title.title.value[i],bibs$TITLE))
