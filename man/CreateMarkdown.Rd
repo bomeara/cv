@@ -4,7 +4,7 @@
 \alias{CreateMarkdown}
 \title{Create a Markdown document from biographical info}
 \usage{
-CreateMarkdown(orcid.info = GetInfoFromOrcid(), outdir = tempdir(),
+CreateMarkdown(orcid.info = nfoFromOrcid(), outdir = tempdir(),
   emphasis.name = "O'Meara", scholar.id = "vpjEkQwAAAAJ",
   impact.story.id = "0000-0002-0337-5997")
 }

@@ -114,59 +114,129 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     return(all.authors)
   }
 
+	#' Create a Markdown document of publications from orcid
+	#' @param orcid.info The list of info from orcid
+	#' @param outdir The directory to store the markdown file in
+	#' @param emphasis.name The name to bold in the publications list. Presumably your own.
+	#' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
+	#' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
+	#' @param badges Vector of ImpactStory badge names you want to show (a lot are goofy: could do c('global_reach', 'depsy')).
+	#' @export
+	CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997", badges=c()) {
+		#lapply(CleanNames(orcid.info$journals), write,  paste(outdir, "/publications.bib", sep=""), append=TRUE)
+		#publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
+		#publications <- sort(publications, decreasing=TRUE, sorting="ynt")
+		#publications.text <- capture.output(print(publications, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
+		#publications.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), publications.text)
 
-  #' Create a Markdown document of publications from orcid
-  #' @param orcid.info The list of info from orcid
-  #' @param outdir The directory to store the markdown file in
-  #' @param emphasis.name The name to bold in the publications list. Presumably your own.
-  #' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
-  #' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
-  #' @param badges Vector of ImpactStory badge names you want to show (a lot are goofy: could do c('global_reach', 'depsy')).
-  #' @export
-  CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997", badges=c()) {
-    lapply(CleanNames(orcid.info$journals), write,  paste(outdir, "/publications.bib", sep=""), append=TRUE)
-  	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
-  	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
-    publications.text <- capture.output(print(publications, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
-    publications.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), publications.text)
+		#cat(CleanNames(orcid.info$other.products), file=paste(outdir, "/chapters.bib", sep=""))
+		#chapters <- RefManageR::ReadBib(paste(outdir, "/chapters.bib", sep=""))
+		#chapters <- sort(chapters, decreasing=TRUE, sorting="ynt")
+		#chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
+		#chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
+		chapters <- orcid.info$other.products[which(orcid.info$other.products$type=='book-chapter'),]
 
-    cat(CleanNames(orcid.info$other.products), file=paste(outdir, "/chapters.bib", sep=""))
-    chapters <- RefManageR::ReadBib(paste(outdir, "/chapters.bib", sep=""))
-    chapters <- sort(chapters, decreasing=TRUE, sorting="ynt")
-    chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
-    chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
+		cat('\n\n## Publications: Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+		if(!is.null(scholar.id)) {
+			g.profile <- NULL
+			try(g.profile <- scholar::get_profile(scholar.id))
+			if(!is.null(g.profile)) {
+				cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however). Also note that I work under a very stringent criterion for when I get authorship -- I have to actively make a significant contribution to the research and writing to merit authorship. For example, in 2015-6, three lab members had papers in *Science* ([grad student Sam Borstein](http://science.sciencemag.org/content/350/6264/1077.long), [postdoc Nick Matzke](http://science.sciencemag.org/content/351/6268/28), and [postdoc Sandy Kawano](http://science.sciencemag.org/content/353/6295/154.full)) but I am, appropriately to my mind, not an author on any of these.", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+			}
+		}
 
-    cat('\n\n## Publications: Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
-    if(!is.null(scholar.id)) {
-      g.profile <- NULL
-      try(g.profile <- scholar::get_profile(scholar.id))
-      if(!is.null(g.profile)) {
-        cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however). Also note that I work under a very stringent criterion for when I get authorship -- I have to actively make a significant contribution to the research and writing to merit authorship. For example, in 2015-6, three lab members had papers in *Science* ([grad student Sam Borstein](http://science.sciencemag.org/content/350/6264/1077.long), [postdoc Nick Matzke](http://science.sciencemag.org/content/351/6268/28), and [postdoc Sandy Kawano](http://science.sciencemag.org/content/353/6295/154.full)) but I am, appropriately to my mind, not an author on any of these.", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-      }
-    }
+		if(!is.null(impact.story.id)) {
+			i.profile <- NULL
+			try(i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep="")))
+			if(!is.null(i.profile)) {
+				if(any(i.profile$badges$name %in% badges)) {
+					cat(paste('\n\nAccording to NSF-funded [ImpactStory.org](https://impactstory.org/u/', impact.story.id, '), a source of altmetrics data (a measure of impact beyond citations), my work has various impacts:',   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+					for (badge.index in sequence(length(badges))) {
+						if(badges[badge.index] %in% i.profile$badges$name) {
+							matching.row <- which(i.profile$badges$name==badges[badge.index])
+							cat(paste('\n* ', gsub("Your", "My", gsub("your", "my", i.profile$badges$description[matching.row])), " ",i.profile$badges$context[matching.row],   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 
-    if(!is.null(impact.story.id)) {
-      i.profile <- NULL
-      try(i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep="")))
-      if(!is.null(i.profile)) {
-        if(any(i.profile$badges$name %in% badges)) {
-          cat(paste('\n\nAccording to NSF-funded [ImpactStory.org](https://impactstory.org/u/', impact.story.id, '), a source of altmetrics data (a measure of impact beyond citations), my work has various impacts:',   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-          for (badge.index in sequence(length(badges))) {
-            if(badges[badge.index] %in% i.profile$badges$name) {
-              matching.row <- which(i.profile$badges$name==badges[badge.index])
-              cat(paste('\n* ', gsub("Your", "My", gsub("your", "my", i.profile$badges$description[matching.row])), " ",i.profile$badges$context[matching.row],   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+						}
+					}
+				}
+			}
+		}
 
-            }
-          }
-        }
-      }
-    }
-    #cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-    cat('\n\n', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-    cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-    cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
-    cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-  }
+		journals <- orcid.info$journals[order(orcid.info$journals$`publication-date.year.value`, decreasing=TRUE),]
+
+
+
+		journals.txt <- '| Authors | Year | Title, Journal | DOI | Citations |\n| -- | -- | -- | -- | -- |'
+		for (i in sequence(nrow(journals))) {
+			journals.txt <- paste0(journals.txt, "\n", "| ", journals$author[i], " | ", journals$`publication-date.year.value`[i], " | ", '"', journals$`title.title.value`[i], '"', " ", journals$`journal-title`[i], " ", journals$number[i], " | ", journals$doi[i], " | ", journals$scholar_citations[i], " | ")
+		}
+
+		chapters.txt <- '| Authors | Year | Title | Book |\n| -- | -- | -- | -- |'
+		for (i in sequence(nrow(chapters))) {
+			chapters.txt <- paste0(chapters.txt, "\n", "| ", chapters$author[i], " | ", chapters$`publication-date.year.value`[i], " | ", '"', chapters$`title.title.value`[i], '"', " | ", chapters$`journal-title`[i], " | ")
+		}
+
+		cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+		cat('\n\n', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+		cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+		cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
+		cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+	}
+
+
+	#
+  # #' Create a Markdown document of publications from orcid
+  # #' @param orcid.info The list of info from orcid
+  # #' @param outdir The directory to store the markdown file in
+  # #' @param emphasis.name The name to bold in the publications list. Presumably your own.
+  # #' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
+  # #' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
+  # #' @param badges Vector of ImpactStory badge names you want to show (a lot are goofy: could do c('global_reach', 'depsy')).
+  # #' @export
+  # CreatePublicationsMarkdown <- function(orcid.info, outdir=tempdir(), emphasis.name = "O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997", badges=c()) {
+  #   lapply(CleanNames(orcid.info$journals), write,  paste(outdir, "/publications.bib", sep=""), append=TRUE)
+  # 	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
+  # 	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
+  #   publications.text <- capture.output(print(publications, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
+  #   publications.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), publications.text)
+	#
+  #   cat(CleanNames(orcid.info$other.products), file=paste(outdir, "/chapters.bib", sep=""))
+  #   chapters <- RefManageR::ReadBib(paste(outdir, "/chapters.bib", sep=""))
+  #   chapters <- sort(chapters, decreasing=TRUE, sorting="ynt")
+  #   chapters.text <- capture.output(print(chapters, .opts=list(bib.style="authoryear", dashed=FALSE, max.names=100, style="markdown", sorting="none", no.print.fields=c("URL", "DOI"))))
+  #   chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
+	#
+  #   cat('\n\n## Publications: Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+  #   if(!is.null(scholar.id)) {
+  #     g.profile <- NULL
+  #     try(g.profile <- scholar::get_profile(scholar.id))
+  #     if(!is.null(g.profile)) {
+  #       cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however). Also note that I work under a very stringent criterion for when I get authorship -- I have to actively make a significant contribution to the research and writing to merit authorship. For example, in 2015-6, three lab members had papers in *Science* ([grad student Sam Borstein](http://science.sciencemag.org/content/350/6264/1077.long), [postdoc Nick Matzke](http://science.sciencemag.org/content/351/6268/28), and [postdoc Sandy Kawano](http://science.sciencemag.org/content/353/6295/154.full)) but I am, appropriately to my mind, not an author on any of these.", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  #     }
+  #   }
+	#
+  #   if(!is.null(impact.story.id)) {
+  #     i.profile <- NULL
+  #     try(i.profile <- jsonlite::fromJSON(txt=paste("https://impactstory.org/api/person/", impact.story.id, sep="")))
+  #     if(!is.null(i.profile)) {
+  #       if(any(i.profile$badges$name %in% badges)) {
+  #         cat(paste('\n\nAccording to NSF-funded [ImpactStory.org](https://impactstory.org/u/', impact.story.id, '), a source of altmetrics data (a measure of impact beyond citations), my work has various impacts:',   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  #         for (badge.index in sequence(length(badges))) {
+  #           if(badges[badge.index] %in% i.profile$badges$name) {
+  #             matching.row <- which(i.profile$badges$name==badges[badge.index])
+  #             cat(paste('\n* ', gsub("Your", "My", gsub("your", "my", i.profile$badges$description[matching.row])), " ",i.profile$badges$context[matching.row],   sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+	#
+  #           }
+  #         }
+  #       }
+  #     }
+  #   }
+  #   #cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  #   cat('\n\n', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  #   cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  #   cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
+  #   cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+  # }
 
   #' Compile a set of markdown documents and convert with pandoc
   #' @param input Vector of markdown documents
@@ -207,7 +277,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   #' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
   #' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
   #' @export
-  CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), emphasis.name="O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997") {
+  CreateMarkdown <- function(orcid.info = nfoFromOrcid(), outdir=tempdir(), emphasis.name="O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997") {
     CreateSummaryMarkdown(orcid.info, outdir)
     CreateEducationMarkdown(orcid.info, outdir)
   	CreateEmploymentMarkdown(orcid.info, outdir)
@@ -255,14 +325,16 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   	publications <- publications[order(publications$`publication-date.month.value`),]
   	publications <- publications[!duplicated(tolower(publications$title.title.value)),]
     publications$doi <- ""
+		publications$author <- ""
+		publications$number <- ""
     for (i in sequence(nrow(publications))) {
       ref.info <- publications$`external-ids.external-id`[[i]]
       if(length(ref.info$`external-id-value`[which(ref.info$`external-id-type`=="doi")])>0) {
         publications$doi[i] <- ref.info$`external-id-value`[which(ref.info$`external-id-type`=="doi")]
       } else {
-        best.match <- agrep(publications$title.title.value[i],bibs$TITLE)
+        best.match <- agrep(publications$title.title.value[i],bibs$TITLE, ignore.case=TRUE)
         if(length(best.match)>1) {
-          best.match <- which.min(adist(publications$title.title.value[i],bibs$TITLE))
+          best.match <- which.min(adist(publications$title.title.value[i],bibs$TITLE, ignore.case=TRUE))
         }
         if(length(best.match)==1) {
           publications$doi[i] <- bibs$DOI[best.match]
@@ -270,13 +342,35 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
       }
     }
 
+		# for (i in sequence(nrow(publications))) {
+		# 		best.match <- agrep(publications$title.title.value[i],bibs$TITLE)
+		# 		if(length(best.match)>1) {
+		# 			best.match <- which.min(adist(publications$title.title.value[i],bibs$TITLE))
+		# 		}
+		# 		if(length(best.match)==1) {
+		# 			publications$author[i] <- gsub('\\{\\\\textquotesingle\\}', "'", paste(bibs$AUTHOR[[best.match]], collapse=", "))
+		# 		}
+		# }
+
+		for (i in sequence(nrow(publications))) {
+				best.match <- agrep(publications$title.title.value[i],scholar$title, ignore.case=TRUE)
+				if(length(best.match)>1) {
+					best.match <- which.min(adist(publications$title.title.value[i],scholar$title, ignore.case=TRUE))
+				}
+				if(length(best.match)==1) {
+					publications$author[i] <-  as.character(scholar$author)[best.match]
+					publications$number[i] <-  as.character(scholar$number)[best.match]
+				}
+		}
+
+
     publications$scholar_citations <- NA
     for (i in sequence(nrow(publications))) {
      # print(i)
      # print(publications$title.title.value[i])
-      best.match <- agrep(tolower(publications$title.title.value[i]),tolower(scholar$title))
+      best.match <- agrep(tolower(publications$title.title.value[i]),tolower(scholar$title), ignore.case=TRUE)
       if(length(best.match)>1) {
-        best.match <- which.min(adist(tolower(publications$title.title.value[i]),tolower(scholar$title)))
+        best.match <- which.min(adist(tolower(publications$title.title.value[i]),tolower(scholar$title), ignore.case=TRUE))
       }
       #print(scholar$title[best.match])
       #print(paste0("Cites ", scholar$cites[best.match]))
@@ -341,7 +435,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     #employment <- activities$employments$`employment-summary`
   #  employment <- employment[order(employment $'start-date.year.value', decreasing=TRUE),]
 
-    return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment, id=id, packages=packages, impact.factor=impact.factor))
+    return(list(journals=journals, other.products=other.products, funding=funding, education=education, employment=employment, id=id, packages=packages, impact.factor=impact.factor, bibs=bibs, scholar=scholar))
 
   }
 
