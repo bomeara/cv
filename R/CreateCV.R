@@ -277,7 +277,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   #' @param scholar.id Your ID on Google Scholar. NULL if you don't want to use this.
   #' @param impact.story..id Your ID on ImpactStory. NULL if you don't want to use this.
   #' @export
-  CreateMarkdown <- function(orcid.info = nfoFromOrcid(), outdir=tempdir(), emphasis.name="O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997") {
+  CreateMarkdown <- function(orcid.info = GetInfoFromOrcid(), outdir=tempdir(), emphasis.name="O'Meara", scholar.id="vpjEkQwAAAAJ", impact.story.id = "0000-0002-0337-5997") {
     CreateSummaryMarkdown(orcid.info, outdir)
     CreateEducationMarkdown(orcid.info, outdir)
   	CreateEmploymentMarkdown(orcid.info, outdir)
@@ -313,14 +313,18 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     # TO DO: Make sure all entries are bibtex
     #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="journal-article")]
 
+		print("Pulling in citations from orcid")
     citations <- rorcid::orcid_citations(id)$citation
 
     cat(citations, file=file.path(tempdir(), "me.bib"), sep="\n\n")
 
+
     bibs <- as.data.frame(bib2df::bib2df(file.path(tempdir(), "me.bib")), stringsAsFactors=FALSE)
     bibs <- bibs[!duplicated(bibs$DOI),]
-
+		print("Pulling in info from Google scholar")
     scholar <- scholar::get_publications(scholar_id)
+
+		print("Pulling in all works from orcid")
   	publications <- rorcid::orcid_works(id, format="application/json")[[1]][[1]]
   	publications <- publications[order(publications$`publication-date.month.value`),]
   	publications <- publications[!duplicated(tolower(publications$title.title.value)),]
@@ -379,6 +383,8 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
         publications$scholar_citations[i] <- scholar$cites[best.match]
       }
     }
+
+		print("Pulling in all R packages from CRAN")
 
     packages <- as.data.frame(packagefinder::exploreFields(package_author_name, c("Maintainer", "Authors@R", "Author"), "or", "like"))
 
