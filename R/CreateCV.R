@@ -178,9 +178,9 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 
 		cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 		cat('\n\n', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
-		cat(publications.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+		cat(journals.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 		cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
-		cat(chapters.text, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+		cat(chapters.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 	}
 
 
