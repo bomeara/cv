@@ -33,7 +33,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     }
   }
 
-    cat('\n\n## Mentoring, Postdocs\n\nI have mentored numerous postdocs off of my own grants and/or as one of their chosen NIMBioS mentors. Note that NIMBioS postdocs pursue independent research projects but choose one faculty member to mentor them in math and another to mentor them in biology (I have served in both roles).', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
+    cat('\n\n## Mentoring, Postdocs\n\nI have mentored numerous postdocs off of my own grants and/or as one of their chosen NIMBioS mentors. Note that NIMBioS postdocs pursue independent research projects but choose one faculty member to mentor them in math and another to mentor them in biology (I have served in both roles).', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
     postdocs <- subset(people, Stage=="Postdoc")
     postdocs <- postdocs[order(postdocs$Last),]
     postdocs.pretty <- postdocs[,c("Name", "Duration", "NIMBioS", "CurrentPosition")]
@@ -60,7 +60,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     com.pretty <- com[,c("Name","Department")]
     cat(capture.output(knitr::kable(com.pretty, row.names=FALSE)), file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
 
-  	cat('\n\n## Mentoring, Faculty\n\nOur department now has faculty mentored by a committee of later career faculty. I have served on committees for folks hired after me.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=FALSE)
+  	cat('\n\n## Mentoring, Faculty\n\nOur department now has faculty mentored by a committee of later career faculty. I have served on committees for folks hired after me.', file=paste(outdir, "/people.md", sep=""), sep='\n', append=TRUE)
     faculty <- subset(people, Stage=="Faculty")
     faculty <- faculty[order(faculty$Last),]
     faculty.pretty <- faculty[,c("Name", "Department")]

@@ -2,7 +2,7 @@ First	Last	Stage	Done	NIMBioS	Start	Stop	Department	URL	CurrentPosition	Note
 Barb	Banbury	Postdoc	Y	N	2010	2012		https://www.linkedin.com/in/bbanbury	Statistical Analyst at Fred Hutch
 Jeremy	Beaulieu	Postdoc	Y	Both	2012	2016		http://www.jeremybeaulieu.org/	Assistant Professor at U. of Arkansas
 Nathan	Jackson	Postdoc	Y	N	2013	2016		http://nathandjackson.com/	Researcher at National Jewish Health
-Sandy	Kawano	Postdoc	Y	Y	2014	2016		http://sandykawano.weebly.com/	Starting as Assistant Professor at  CSU Long Beach in Aug. 2017
+Sandy	Kawano	Postdoc	Y	Y	2014	2016		http://sandykawano.weebly.com/	Assistant Professor George Washington U
 Megan	Rua	Postdoc	Y	Y	2015	2016		https://meganrua.wordpress.com	Assistant Professor Wright State U
 Sam	Borstein	PhD student	Y	N	2014	2019		https://fish4thought.wordpress.com/
 Jenn	Bosco	PhD student	Y	N	2012	2017		https://sites.google.com/site/jenniferboscoinfo/home		Co-advised with Susan Riechert
@@ -16,6 +16,7 @@ Michelle	Lawing	Postdoc	Y	Y	2012	2014		http://people.tamu.edu/~alawing/	Assistan
 Nick	Matzke	Postdoc	Y	Y	2013	2015		http://nickmatzke.weebly.com	DECRA Fellow at The Australian National University in Canberra
 Ryan	Martin	Postdoc	Y	Y	2012	2013		http://www.martinevolutionaryecologylab.com	Assistant Professor Case Western U
 Christian	Yarber	Undergrad	Y	N	2015	2016		https://www.researchgate.net/profile/Christian_Yarber
+Zach	Tharpe	Undergrad	Y	N	2019
 Nicholas	Gladstone	Committee	N				Geology
 Daniel	Gates	GSOC								"GSoC 2012: Optimizing R code for approximate Bayesian computing. Note that the mentors for this project were Barb Banbury, Derrick Zwickl, and Hilmar Lapp"
 J. Conrad	Stack	GSOC								GSoC 2010: Doing ancestral state estimation in R by porting Brownie
@@ -43,18 +44,17 @@ Marisol	Sanchez-Garcia	Committee	Y				EEB
 Jess	Welch	Committee	Y				EEB
 Rachel	Wooliver	Committee	Y				EEB
 Sarah	Sheffield	Committee	Y				Geology
-Sara Lipshutz Committee Y				EEB
 Jen	Bauer	Committee	Y				Geology
 Ryan	Rooney	Committee	N				Geology
-Sergei	Tarasov	Postdoc	N	Y	2016	2018		https://sites.google.com/site/starasovresearch/	NIMBioS postdoc
 Jasper	Lee	Committee	Y				Microbiology
 Luna	Sanchez Reyes	Postdoc	Y	N	2017	2019	EEB
 David	Bapst	Postdoc	N	N	2017		EEB
 John	Reese Committee N   EEB
 Sam	Williams  Committee Y   Anthropology
-Liz	Agosto  Committee Y   Anthropology
+Liz	Agosto	Committee	Y   Anthropology
 Liz	Derryberry	Faculty	N	N	2017		EEB
 Kimberly	Sheldon	Faculty	N	N	2017		EEB
 Stephanie	Kivlin	Faculty	N	N	2018		EEB
-Jodie	Wiggins	Postdoc	Y	N	2018	2019	EEB   http://jodiewiggins.wixsite.com/mysite
-Zach Tharpe	Undergrad	Y	N	2019
+Jodie	Wiggins	Postdoc	N	N	2018	2019	  EEB	http://jodiewiggins.wixsite.com/mysite
+Sara	Lipshutz	Committee	Y				EEB
+Sergei	Tarasov	Postdoc	Y	Y	2016	2018		https://sites.google.com/site/starasovresearch/	  	NIMBioS postdoc
