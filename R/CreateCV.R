@@ -136,7 +136,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 		#chapters.text <- gsub(emphasis.name, paste('**', emphasis.name, '**', sep=""), chapters.text)
 		chapters <- orcid.info$other.products[which(orcid.info$other.products$type=='book-chapter'),]
 
-		cat('\n\n## Publications: Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
+		cat('\n\n## Publications', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=FALSE)
 		if(!is.null(scholar.id)) {
 			g.profile <- NULL
 			try(g.profile <- scholar::get_profile(scholar.id))
@@ -168,7 +168,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 
 		journals.txt <- '| Authors | Year | Title, Journal | DOI | Citations |\n| -- | -- | -- | -- | -- |'
 		for (i in sequence(nrow(journals))) {
-			journals.txt <- paste0(journals.txt, "\n", "| ", journals$author[i], " | ", journals$`publication-date.year.value`[i], " | ", '"', journals$`title.title.value`[i], '"', " ", journals$`journal-title`[i], " ", journals$number[i], " | ", journals$doi[i], " | ", journals$scholar_citations[i], " | ")
+			journals.txt <- paste0(journals.txt, "\n", "| ", journals$author[i], " | ", journals$`publication-date.year.value`[i], " | ", '"', journals$`title.title.value`[i], '"', " ", journals$`journal-title`[i], " ", journals$number[i], " | ", "[", journals$doi[i], "](https://doi.org/", journals$doi[i], ")", " | ", journals$scholar_citations[i], " | ")
 		}
 
 		chapters.txt <- '| Authors | Year | Title | Book |\n| -- | -- | -- | -- |'
@@ -176,7 +176,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 			chapters.txt <- paste0(chapters.txt, "\n", "| ", chapters$author[i], " | ", chapters$`publication-date.year.value`[i], " | ", '"', chapters$`title.title.value`[i], '"', " | ", chapters$`journal-title`[i], " | ")
 		}
 
-		cat('\n\n###Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+		cat('\n\n### Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 		cat('\n\n', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 		cat(journals.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 		cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
@@ -257,7 +257,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     system(paste("pandoc --css ", css, " -o ", output, ".md ", paste(input, collapse=" "), sep=""))
     system(paste("pandoc --css ", css, " -o ", output, ".docx ", paste(input, collapse=" "), sep=""))
     print(paste("MS Word file ", output, ".docx has been created in ", outdir, sep=""))
-    #system(paste("pandoc -o ", output, "_fromword.pdf ", paste0(output, ".docx"), sep=""))
+    system(paste("pandoc -o ", output, "_fromword.pdf ", paste0(output, ".docx"), sep=""))
     if(open.files) {
       system(paste0("open ", output, ".docx"))
       system(paste0("open ", output, ".pdf"))
@@ -544,17 +544,17 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     results[1,2] <- paste(length(orcid.info$journals)+publications.offset, " journal articles, including ", prominent.pubs, sep="")
 
     results[2,1] <- '**Teaching**'
-    results[2,2] <- "Approximately 3 courses per year on average, ranging from large introductory biology courses to small graduate seminars"
+    results[2,2] <- "Approximately 2 courses per year on average, ranging from large introductory biology courses to small graduate seminars"
 
     results[3,1] <- '**Mentoring**'
     people <- read.delim2(system.file("extdata", "people.txt", package="cv"), stringsAsFactors=FALSE)
     results[3,2] <- paste(sum(grepl("PhD student", people$Stage)), " PhD students, ", sum(grepl("Postdoc", people$Stage)), " postdocs, ", sum(grepl("Faculty", people$Stage)), " faculty, ", "and served on ", sum(grepl("Committee", people$Stage)), " graduate student committees", sep="")
 
     results[4,1] <- '**Service/Outreach**'
-    results[4,2] <- 'Darwin Day TN advisor, co-organizer of women in science symposium, workshops, and other activities, co-organizer for scientific meetings, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'
+    results[4,2] <- 'Darwin Day TN advisor, curator of R phylogenetics task view, instructor at workshops in Sweden, Switzerland, Brazil, and various US locations (Ohio, TN, NC)'
 
     results[5,1] <- '**Leadership**'
-    results[5,2] <- 'Associate Head for Dept. of Ecology & Evolutionary Biology, 2016-present; Associate Director for the National Institute for Mathematical and Biological Synthesis, 2016-present; Code of Conduct Committee for SSE/SSB/ASN, 2018-present; Communications Director for the Society of Systematic Biologists, 2016-2017; Society of Systematic Biologists Council, 2012-2014; iEvoBio co-organizer, 2014-2016.'
+    results[5,2] <- 'Associate Head for Dept. of Ecology & Evolutionary Biology, 2016-present; Associate Director for the National Institute for Mathematical and Biological Synthesis, 2016-2018; Code of Conduct Committee for SSE/SSB/ASN, 2018-present; Communications Director for the Society of Systematic Biologists, 2016-2017; Society of Systematic Biologists Council, 2012-2014; iEvoBio co-organizer, 2014-2016.'
 
     results[6,1] <- '**Funding**'
     total.funding <- 0
