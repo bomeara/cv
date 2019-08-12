@@ -267,7 +267,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     print(paste("PDF file ", output, ".pdf has been created in ", outdir, sep=""))
     #system(paste("pandoc --css ", css, " -o ", output, "_pandoc.pdf ", paste(input, collapse=" "), sep=""))
     system(paste("pandoc --css ", css, " -o ", output, ".md ", paste(input, collapse=" "), sep=""))
-    system(paste("pandoc -reference-doc ", system.file("extdata", "custom-reference.docx", package="cv"), " -o ", output, ".docx ", paste(input, collapse=" "), sep=""))
+    system(paste("pandoc -reference-doc ", system.file("extdata", "reference.docx", package="cv"), " -o ", output, ".docx ", paste(input, collapse=" "), sep=""))
     print(paste("MS Word file ", output, ".docx has been created in ", outdir, sep=""))
     system(paste("pandoc -o ", output, "_fromword.pdf ", paste0(output, ".docx"), sep=""))
     if(open.files) {
