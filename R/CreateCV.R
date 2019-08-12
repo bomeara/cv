@@ -260,7 +260,6 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "presentations.md", "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV", open.files=TRUE) {
     original.wd <- getwd()
     setwd(outdir)
-		custom-reference.docx
     system(paste("pandoc --css ", css, " -o ", output, ".html ", paste(input, collapse=" "), sep=""))
     print(paste("HTML file ", output, ".html has been created in ", outdir, sep=""))
     system(paste("wkhtmltopdf ", output, ".html ", output, ".pdf", sep=""))
