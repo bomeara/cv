@@ -181,7 +181,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 		packages.txt <- '### Packages \n\nSoftware developed in R (often associated with a publication, but not always)\n\n| Package | Authors | Description | Downloads |\n| -- | -- | -- | -- |'
 		packages <- orcid.info$packages
 		for (i in sequence(nrow(packages))) {
-			packages.txt <- paste0(packages.txt, "\n", "| ", packages$NAME[i], " | ", gsub(",,", ",", gsub(" \\[aut, cre\\]", "", gsub(" \\[aut\\]", "", gsub("  ", " ",gsub("\\n", ", ", packages$AUTHOR[i]))))), " | ", packages$DESC_SHORT[i], " | ", packages$downloads, " |")
+			packages.txt <- paste0(packages.txt, "\n", "| ", packages$NAME[i], " | ", gsub(",,", ",", gsub(" \\[aut, cre\\]", "", gsub(" \\[aut\\]", "", gsub("  ", " ",gsub("\\n", ", ", packages$AUTHOR[i]))))), " | ", packages$DESC_SHORT[i], " | ", packages$downloads[i], " |")
 		}
 
 		cat('\n\n### Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
@@ -189,6 +189,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 		cat(journals.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 		cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
 		cat(chapters.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+
 		cat(packages.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 
 	}
@@ -256,7 +257,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   #' @param open.files If TRUE, open the output files
   #' @export
   #FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "service.md", "postdocs.md", "gradstudents.md", "undergradstudents.md", "gradcommittees.md", "software.md", "presentations.md"), output="OMearaCV.pdf") {
-  FinalCompileCV <- function(input = c(system.file("extdata", "head.md", package="cv"), "summary.md", "education.md", "employment.md", "publications.md", system.file("extdata", "teaching.md", package="cv"), "funding.md", system.file("extdata", "presentations.md", package="cv"), "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV", open.files=TRUE) {
+  FinalCompileCV <- function(input = c("head.md", "summary.md", "education.md", "employment.md", "publications.md", "teaching.md", "funding.md", "presentations.md", "people.md", "service.md"), outdir=tempdir(), css = system.file("extdata", "format.css", package="cv"), output="OMearaCV", open.files=TRUE) {
     original.wd <- getwd()
     setwd(outdir)
     system(paste("pandoc --css ", css, " -o ", output, ".html ", paste(input, collapse=" "), sep=""))
@@ -297,6 +298,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     CreateServiceMarkdown(outdir=outdir)
 		CreatePresentationsMarkdown(outdir=outdir)
 		CreateHeadMarkdown(outdir=outdir)
+		CreateTeachingMarkdown(outdir=outdir)
   }
 
 #' Copy the presentations markdown
@@ -313,6 +315,13 @@ CreateHeadMarkdown <- function(outdir = tempdir()) {
 	file.copy(system.file("extdata", "head.md", package="cv"), outdir)
 }
 
+
+#' Copy the teaching markdown
+#' @param outdir The directory to store the markdown file in
+#' @export
+CreateTeachingMarkdown <- function(outdir = tempdir()) {
+	file.copy(system.file("extdata", "teaching.md", package="cv"), outdir)
+}
 
   #' Pull in info from ORCID
   #' @param id Your ORCID id

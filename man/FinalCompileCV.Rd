@@ -4,13 +4,11 @@
 \alias{FinalCompileCV}
 \title{Compile a set of markdown documents and convert with pandoc}
 \usage{
-FinalCompileCV(input = c(system.file("extdata", "head.md", package =
-  "cv"), "summary.md", "education.md", "employment.md", "publications.md",
-  system.file("extdata", "teaching.md", package = "cv"), "funding.md",
-  system.file("extdata", "presentations.md", package = "cv"), "people.md",
-  "service.md"), outdir = tempdir(), css = system.file("extdata",
-  "format.css", package = "cv"), output = "OMearaCV",
-  open.files = TRUE)
+FinalCompileCV(input = c("head.md", "summary.md", "education.md",
+  "employment.md", "publications.md", "teaching.md", "funding.md",
+  "presentations.md", "people.md", "service.md"), outdir = tempdir(),
+  css = system.file("extdata", "format.css", package = "cv"),
+  output = "OMearaCV", open.files = TRUE)
 }
 \arguments{
 \item{input}{Vector of markdown documents}
