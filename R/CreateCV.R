@@ -141,7 +141,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 			g.profile <- NULL
 			try(g.profile <- scholar::get_profile(scholar.id))
 			if(!is.null(g.profile)) {
-				cat(paste('\n\nAccording to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however). Also note that I work under a very stringent criterion for when I get authorship -- I have to actively make a significant contribution to the research and writing to merit authorship. For example, in 2015-6, three lab members had papers in *Science* ([grad student Sam Borstein](http://science.sciencemag.org/content/350/6264/1077.long), [postdoc Nick Matzke](http://science.sciencemag.org/content/351/6268/28), and [postdoc Sandy Kawano](http://science.sciencemag.org/content/353/6295/154.full)) but I am, appropriately to my mind, not an author on any of these.", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+				cat(paste("\n\nI would recommend reading a few of my best papers to get a sense of my work; good examples are [O'Meara, Smith, et al. (2016)](https://doi.org/10.1098/rspb.2015.2304) and [Beaulieu & O'Meara (2016)](https://doi.org/10.1093/sysbio/syw022). Metrics are not as great (for example, my work with software might get cited than someone else's work on a new discovery about evolution, but it is not clear that the former is 'better') , but I know some people find them useful, so:", ' According to Google Scholar, my work has been cited ', g.profile$total_cites, " times, and my h-index is ", g.profile$h_index, ". (Google Scholar tends to overestimate citations, however). If there were a journal of just my papers, its ", as.numeric(format(Sys.Date(), "%Y"))-1," impact factor would be ",round(orcid.info$impact.factor,3), ". Also note that I work under a very stringent criterion for when I get authorship -- I have to actively make a significant contribution to the research and writing to merit authorship. For example, in 2015-6, three lab members had papers in *Science* ([grad student Sam Borstein](http://science.sciencemag.org/content/350/6264/1077.long), [postdoc Nick Matzke](http://science.sciencemag.org/content/351/6268/28), and [postdoc Sandy Kawano](http://science.sciencemag.org/content/353/6295/154.full)) but I am, appropriately to my mind, not an author on any of these.", sep=""),  file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 			}
 		}
 
@@ -173,7 +173,15 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 
 		chapters.txt <- '| Authors | Year | Title | Book |\n| -- | -- | -- | -- |'
 		for (i in sequence(nrow(chapters))) {
-			chapters.txt <- paste0(chapters.txt, "\n", "| ", chapters$author[i], " | ", chapters$`publication-date.year.value`[i], " | ", '"', chapters$`title.title.value`[i], '"', " | ", chapters$`journal-title`[i], " | ")
+			if(nchar(chapters$author[i])>0) {
+				chapters.txt <- paste0(chapters.txt, "\n", "| ", chapters$author[i], " | ", chapters$`publication-date.year.value`[i], " | ", '"', chapters$`title.title.value`[i], '"', " | ", chapters$`journal-title.value`[i], " | ")
+			}
+		}
+
+		packages.txt <- '### Packages \n\nSoftware developed in R (often associated with a publication, but not always)\n\n| Package | Authors | Description | Downloads |\n| -- | -- | -- | -- |'
+		packages <- orcid.info$packages
+		for (i in sequence(nrow(packages))) {
+			packages.txt <- paste0(packages.txt, "\n", "| ", packages$NAME[i], " | ", gsub(",,", ",", gsub(" \\[aut, cre\\]", "", gsub(" \\[aut\\]", "", gsub("  ", " ",gsub("\\n", ", ", packages$AUTHOR[i]))))), " | ", packages$DESC_SHORT[i], " | ", packages$downloads, " |")
 		}
 
 		cat('\n\n### Papers', file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
@@ -181,6 +189,8 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
 		cat(journals.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
 		cat('\n\n## Publications: Books or Book Chapters\n\n', file=paste(outdir, "/publications.md", sep=""), append=TRUE)
 		cat(chapters.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+		cat(packages.txt, file=paste(outdir, "/publications.md", sep=""), sep='\n', append=TRUE)
+
 	}
 
 
@@ -541,7 +551,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     results <- data.frame(matrix(nrow=6, ncol=2))
     colnames(results) <- c("", "")
     results[1,1] <- '**Publications**'
-    results[1,2] <- paste(length(orcid.info$journals)+publications.offset, " journal articles, including ", prominent.pubs, sep="")
+    results[1,2] <- paste(nrow(orcid.info$journals)+publications.offset, " journal articles, including ", prominent.pubs, sep="")
 
     results[2,1] <- '**Teaching**'
     results[2,2] <- "Approximately 2 courses per year on average, ranging from large introductory biology courses to small graduate seminars"
