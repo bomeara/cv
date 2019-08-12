@@ -295,9 +295,23 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
     CreatePublicationsMarkdown(orcid.info, outdir, emphasis.name, scholar.id, impact.story.id)
     CreatePeopleMarkdown(outdir=outdir)
     CreateServiceMarkdown(outdir=outdir)
+		CreatePresentationsMarkdown(outdir=outdir)
+		CreateHeadMarkdown(outdir=outdir)
   }
 
+#' Copy the presentations markdown
+#' @param outdir The directory to store the markdown file in
+#' @export
+CreatePresentationsMarkdown <- function(outdir = tempdir()) {
+	file.copy(system.file("extdata", "presentations.md", package="cv"), outdir)
+}
 
+#' Copy the head markdown
+#' @param outdir The directory to store the markdown file in
+#' @export
+CreateHeadMarkdown <- function(outdir = tempdir()) {
+	file.copy(system.file("extdata", "head.md", package="cv"), outdir)
+}
 
 
   #' Pull in info from ORCID
