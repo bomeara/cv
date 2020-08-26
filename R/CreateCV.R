@@ -375,6 +375,13 @@ CreateTeachingMarkdown <- function(outdir = tempdir()) {
         }
         if(length(best.match)==1) {
           publications$doi[i] <- bibs$DOI[best.match]
+          #publications$author[i] <- bibs$AUTHOR[best.match]
+          publications$author[i] <- gsub('\\{\\\\textquotesingle\\}', "'", paste(bibs$AUTHOR[[best.match]], collapse=", "))
+          publications$author[i] <- gsub("{\\'{e}}", "é", publications$author[i], fixed=TRUE)
+          publications$author[i] <- gsub("{\\'{a}}", "á", publications$author[i], fixed=TRUE)
+          publications$author[i] <- gsub("{\\'{o}}", "ó", publications$author[i], fixed=TRUE)
+          publications$author[i] <- gsub("{'}", "'", publications$author[i], fixed=TRUE)
+
         }
       }
     }
@@ -395,7 +402,7 @@ CreateTeachingMarkdown <- function(outdir = tempdir()) {
 					best.match <- which.min(adist(publications$title.title.value[i],scholar$title, ignore.case=TRUE))
 				}
 				if(length(best.match)==1) {
-					publications$author[i] <-  as.character(scholar$author)[best.match]
+				#	publications$author[i] <-  as.character(scholar$author)[best.match]
 					publications$number[i] <-  as.character(scholar$number)[best.match]
 				}
 		}
