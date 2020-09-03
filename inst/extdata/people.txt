@@ -7,7 +7,7 @@ Megan	Rua	Postdoc	Y	Y	2015	2016		https://meganrua.wordpress.com	Assistant Profes
 Sam	Borstein	PhD student	Y	N	2014	2019		https://fish4thought.wordpress.com/
 Jenn	Bosco	PhD student	Y	N	2012	2017		https://sites.google.com/site/jenniferboscoinfo/home		Co-advised with Susan Riechert
 Katie	Massana	PhD student	Y	N	2012	2017		https://sites.google.com/site/kathrynamassana/home
-Orlando	Schwery	PhD student	N	N	2014			https://sites.google.com/site/orlandoschwery/home
+Orlando	Schwery	PhD student	N	N	2014	2020		https://sites.google.com/site/orlandoschwery/home
 Hugo	Alamillo	Postdoc	Y	N	2011	2012		https://people.northseattle.edu/users/halamillo	Assistant Professor North Seattle College
 Juanjuan (JJ)	Crosskey (formerly Chai)	Postdoc	Y	Y	2011	2013		https://www.linkedin.com/in/jjcrosskey	Quantitative Analyst at Quantamental Technologies LLC
 Tony	Jhwueng	Postdoc	Y	Y	2009	2011		http://www.tonyjhwueng.info/	"Assistant Professor Feng-Chia U., Taiwan"
@@ -62,3 +62,5 @@ Stephen Ray Undergrad Y Y 2019
 Tyler-Christian Daniels Undergrad Y N 2019
 Krista	De Cooke	PhD student	N	N	2020			https://www.linkedin.com/in/krista-de-cooke-163a87116/		Co-advised with Dan Simberloff
 Jenn    Summers PhD student	N	N	2020			https://cubalibrejenn.wixsite.com/jennsummers
+
+
