@@ -57,7 +57,7 @@ Kimberly	Sheldon	Faculty	N	N	2017		EEB
 Stephanie	Kivlin	Faculty	N	N	2018		EEB
 Jodie	Wiggins	Postdoc	Y	N	2018	2019	EEB   http://jodiewiggins.wixsite.com/mysite
 Zach	Tharpe	Undergrad	Y	N	2019
-Jenn	Summers	PhD	student	N	N	2020	EEB	https://cubalibrejenn.wixsite.com/jennsummers
+Jenn	Summers	PhD student	N	N	2020			https://cubalibrejenn.wixsite.com/jennsummers		
 Stephen	Ray	Undergrad	Y	Y	2019
 Tyler-Christian	Daniels	Undergrad	Y	N	2019
 Krista	De Cooke	PhD student	N	N	2020			https://www.linkedin.com/in/krista-de-cooke-163a87116/		Co-advised with Dan Simberloff
