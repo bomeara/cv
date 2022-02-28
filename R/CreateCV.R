@@ -89,7 +89,7 @@ CreatePeopleMarkdown <- function(infile =   system.file("extdata", "people.txt",
   #' @return vector of the authors
   #' @export
   GetCollaborators <- function(orcid.info, starting.year=2013, outdir=tempdir()) {
-    lapply(CleanNames(orcid.info$journals), write,  paste(outdir, "/publications.bib", sep=""), append=TRUE)
+    lapply(unlist(CleanNames(orcid.info$journals)), write,  paste(outdir, "/publications.bib", sep=""), append=TRUE)
   	publications <- RefManageR::ReadBib(paste(outdir, "/publications.bib", sep=""))
   	publications <- sort(publications, decreasing=TRUE, sorting="ynt")
     publications <- publications[which(as.numeric(publications$year)>=starting.year)]
@@ -347,7 +347,7 @@ CreateTeachingMarkdown <- function(outdir = tempdir()) {
     #journals <- me.pubs$'work-citation.citation'[which(me.pubs$'work-type'=="journal-article")]
 
 		print("Pulling in citations from orcid")
-    citations <- rorcid::orcid_citations(id)$citation
+    citations <- unlist(rorcid::orcid_citations(id)$citation)
 
     cat(citations, file=file.path(tempdir(), "me.bib"), sep="\n\n")
 
